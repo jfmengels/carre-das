@@ -104,12 +104,12 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        case model.role of
-            UndecidedUserType ->
-                [ viewRoleSelection ]
+        [ Html.div [ Attr.style "height" "100%" ]
+            (case model.role of
+                UndecidedUserType ->
+                    [ viewRoleSelection ]
 
-            Host ->
-                [ Html.div [ Attr.style "height" "100%" ]
+                Host ->
                     [ header
                         [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
                         , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
@@ -118,26 +118,24 @@ view model =
                         ]
                     , viewBody model
                     ]
-                ]
 
-            Player color ->
-                let
-                    text : String
-                    text =
-                        case color of
-                            Blue ->
-                                model.blue
+                Player color ->
+                    let
+                        text : String
+                        text =
+                            case color of
+                                Blue ->
+                                    model.blue
 
-                            Yellow ->
-                                model.yellow
+                                Yellow ->
+                                    model.yellow
 
-                            Red ->
-                                model.red
+                                Red ->
+                                    model.red
 
-                            Green ->
-                                model.green
-                in
-                [ Html.div [ Attr.style "height" "100%" ]
+                                Green ->
+                                    model.green
+                    in
                     [ header
                         [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
                         ]
@@ -168,7 +166,8 @@ view model =
                             ]
                         ]
                     ]
-                ]
+            )
+        ]
     }
 
 
