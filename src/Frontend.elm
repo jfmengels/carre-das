@@ -223,17 +223,23 @@ viewPlayerSelectButton color =
 
 viewBody : Model -> Html FrontendMsg
 viewBody model =
+    bodyWrapper
+        [ viewBox Blue model
+        , viewBox Yellow model
+        , viewBox Red model
+        , viewBox Green model
+        ]
+
+
+bodyWrapper : List (Html msg) -> Html msg
+bodyWrapper children =
     Html.div
         [ Attr.style "display" "flex"
         , Attr.style "flex-wrap" "wrap"
         , Attr.style "flex-direction" "row"
         , Attr.style "min-height" "1000px"
         ]
-        [ viewBox Blue model
-        , viewBox Yellow model
-        , viewBox Red model
-        , viewBox Green model
-        ]
+        children
 
 
 viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Html FrontendMsg
