@@ -196,7 +196,13 @@ viewRoleSelection =
         , Attr.style "max-width" "200px"
         , Attr.style "min-height" "1000px"
         ]
-        [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
+        [ Html.div
+            [ Attr.style "padding" "20px 0 0 20px"
+            , Attr.style "display" "flex"
+            , Attr.style "gap" "20px"
+            , Attr.style "height" "40px"
+            ]
+            [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ] ]
         , Html.div
             [ Attr.style "display" "flex"
             , Attr.style "flex-wrap" "wrap"
