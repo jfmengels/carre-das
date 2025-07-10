@@ -385,3 +385,19 @@ backgroundColor color =
             Green ->
                 "green"
         )
+
+
+backgroundColor2 : Color -> Element.Color
+backgroundColor2 color =
+    case color of
+        Blue ->
+            Element.rgb 0 0 1
+
+        Yellow ->
+            Element.rgb255 255 165 0
+
+        Red ->
+            Element.rgb 1 0 0
+
+        Green ->
+            Element.rgb 0 0.5 0
