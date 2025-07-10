@@ -110,13 +110,7 @@ view model =
 
             Host ->
                 [ Html.div [ Attr.style "height" "100%" ]
-                    [ Html.div
-                        [ Attr.style "height" "100%"
-                        , Attr.style "padding" "20px 0 0 20px"
-                        , Attr.style "display" "flex"
-                        , Attr.style "gap" "20px"
-                        , Attr.style "height" "40px"
-                        ]
+                    [ header
                         [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
                         , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
                         , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
@@ -144,12 +138,7 @@ view model =
                                 model.green
                 in
                 [ Html.div [ Attr.style "height" "100%" ]
-                    [ Html.div
-                        [ Attr.style "padding" "20px 0 0 20px"
-                        , Attr.style "display" "flex"
-                        , Attr.style "gap" "20px"
-                        , Attr.style "height" "40px"
-                        ]
+                    [ header
                         [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
                         ]
                     , Html.div
@@ -183,6 +172,18 @@ view model =
     }
 
 
+header : List (Html msg) -> Html msg
+header children =
+    Html.div
+        [ Attr.style "height" "100%"
+        , Attr.style "padding" "20px 0 0 20px"
+        , Attr.style "display" "flex"
+        , Attr.style "gap" "20px"
+        , Attr.style "height" "40px"
+        ]
+        children
+
+
 viewRoleSelection : Html FrontendMsg
 viewRoleSelection =
     Html.div
@@ -196,13 +197,9 @@ viewRoleSelection =
         , Attr.style "max-width" "200px"
         , Attr.style "min-height" "1000px"
         ]
-        [ Html.div
-            [ Attr.style "padding" "20px 0 0 20px"
-            , Attr.style "display" "flex"
-            , Attr.style "gap" "20px"
-            , Attr.style "height" "40px"
+        [ header
+            [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
             ]
-            [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ] ]
         , Html.div
             [ Attr.style "display" "flex"
             , Attr.style "flex-wrap" "wrap"
