@@ -2,7 +2,7 @@ module Frontend exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
-import Element
+import Element exposing (Element)
 import Element.Font as Font
 import Html exposing (Html)
 import Html.Attributes as Attr
@@ -177,6 +177,7 @@ view model =
                                  else
                                     text
                                 )
+                                |> Element.layout []
                             ]
                         ]
                     ]
@@ -216,7 +217,7 @@ viewPlayerSelectButton : Color -> Html FrontendMsg
 viewPlayerSelectButton color =
     Html.div
         (boxAttributes color (Events.onClick (ChangeRole (Player color))))
-        [ viewBoxContent "Joueur"
+        [ viewBoxContent "Joueur" |> Element.layout []
         ]
 
 
@@ -268,19 +269,19 @@ viewBox color model =
         ShowingAll ->
             Html.div
                 (boxAttributes color (Attr.class ""))
-                [ viewBoxContent text
+                [ viewBoxContent text |> Element.layout []
                 ]
 
         Showing Nothing ->
             Html.div
                 (boxAttributes color (Events.onClick (Show (Just color))))
-                [ viewBoxContent "Révéler" ]
+                [ viewBoxContent "Révéler" |> Element.layout [] ]
 
         Showing (Just showingColor) ->
             if color == showingColor then
                 Html.div
                     (boxAttributes color (Events.onClick (Show Nothing)))
-                    [ viewBoxContent text ]
+                    [ viewBoxContent text |> Element.layout [] ]
 
             else
                 Html.div
@@ -315,7 +316,7 @@ sharedBoxAttributes color eventHandler =
     ]
 
 
-viewBoxContent : String -> Html msg
+viewBoxContent : String -> Element msg
 viewBoxContent text =
     Element.column
         [ Element.centerX
@@ -335,7 +336,6 @@ viewBoxContent text =
                 )
             ]
         ]
-        |> Element.layout []
 
 
 backgroundColor : Color -> Html.Attribute msg
