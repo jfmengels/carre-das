@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
+import Lamdera exposing (ClientId)
 import Url exposing (Url)
 
 
@@ -64,6 +65,7 @@ type ToBackend
 
 type BackendMsg
     = NoOpBackendMsg
+    | ClientConnected ClientId
 
 
 type ToFrontend
