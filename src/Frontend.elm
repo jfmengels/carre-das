@@ -168,8 +168,8 @@ viewBox color model =
 
             else
                 Html.div
-                    (boxAttributes color (Attr.class ""))
-                    [ viewBoxContent "" ]
+                    (boxAttributes color (Attr.style "margin" "20px"))
+                    [ Html.text "\u{00A0}" ]
 
 
 boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
