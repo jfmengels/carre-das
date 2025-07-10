@@ -303,9 +303,11 @@ viewBox color model =
                 ]
 
         Showing Nothing ->
-            Html.div
-                (boxAttributes color (Events.onClick (Show (Just color))))
-                [ viewBoxContent "Révéler" |> Element.layout [] ]
+            box color
+                { onPress = Just (Show (Just color))
+                , label = "Révéler"
+                }
+                |> Element.layout []
 
         Showing (Just showingColor) ->
             if color == showingColor then
@@ -317,6 +319,20 @@ viewBox color model =
                 Html.div
                     (boxAttributes color (Attr.class ""))
                     [ Html.text "\u{00A0}" ]
+
+
+box : Color -> { onPress : Maybe msg, label : String } -> Element msg
+box color { onPress, label } =
+    Element.Input.button
+        [ Element.centerX
+        , Element.centerY
+        , Element.height Element.fill
+        , Element.width Element.fill
+        , Background.color (backgroundColor2 color)
+        ]
+        { onPress = onPress
+        , label = viewBoxContent label
+        }
 
 
 fullPageBoxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
