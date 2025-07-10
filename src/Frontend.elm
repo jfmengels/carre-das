@@ -144,31 +144,25 @@ viewBox color model =
                     model.green
     in
     Html.div
-        [ backgroundColor color
-        , Attr.style "color" "white"
-        , Attr.style "font-weight" "bold"
-        , Attr.style "display" "flex"
-        , Attr.style "flex-basis" "calc(50% - 40px)"
-        , Attr.style "justify-content" "center"
-        , Attr.style "flex-direction" "column"
-        , Attr.style "margin" "20px"
-        , case model.mode of
-            Editing ->
-                Attr.class ""
-
-            ShowingAll ->
-                Attr.class ""
-
-            Showing Nothing ->
-                Events.onClick (Show (Just color))
-
-            Showing (Just showColor) ->
-                if color == showColor then
-                    Events.onClick (Show Nothing)
-
-                else
+        (boxAttributes color
+            (case model.mode of
+                Editing ->
                     Attr.class ""
-        ]
+
+                ShowingAll ->
+                    Attr.class ""
+
+                Showing Nothing ->
+                    Events.onClick (Show (Just color))
+
+                Showing (Just showColor) ->
+                    if color == showColor then
+                        Events.onClick (Show Nothing)
+
+                    else
+                        Attr.class ""
+            )
+        )
         [ case model.mode of
             Editing ->
                 Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] []
@@ -186,6 +180,20 @@ viewBox color model =
             Showing Nothing ->
                 viewBoxContent "Révéler"
         ]
+
+
+boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
+boxAttributes color eventHandler =
+    [ backgroundColor color
+    , Attr.style "color" "white"
+    , Attr.style "font-weight" "bold"
+    , Attr.style "display" "flex"
+    , Attr.style "flex-basis" "calc(50% - 40px)"
+    , Attr.style "justify-content" "center"
+    , Attr.style "flex-direction" "column"
+    , Attr.style "margin" "20px"
+    , eventHandler
+    ]
 
 
 viewBoxContent : String -> Html msg
