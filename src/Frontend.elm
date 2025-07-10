@@ -3,7 +3,10 @@ module Frontend exposing (..)
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Element exposing (Element)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
+import Element.Input
 import Html exposing (Html)
 import Html.Attributes as Attr
 import Html.Events as Events
@@ -137,7 +140,8 @@ view model =
 
                 Host ->
                     [ header
-                        [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
+                        [ button { onPress = Just Edit, label = Element.text "Editer" }
+                            |> Element.layout []
                         , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
                         , Html.button [ Events.onClick (Show Nothing), Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
                         , Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
@@ -152,6 +156,16 @@ view model =
             )
         ]
     }
+
+
+button : { onPress : Maybe msg, label : Element msg } -> Element msg
+button =
+    Element.Input.button
+        [ Border.width 1
+        , Border.rounded 3
+        , Element.padding 5
+        , Background.color (Element.rgb 0.95 0.95 0.95)
+        ]
 
 
 header : List (Html msg) -> Html msg
