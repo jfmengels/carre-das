@@ -116,7 +116,7 @@ viewBody model =
         [ Attr.style "display" "flex"
         , Attr.style "flex-wrap" "wrap"
         , Attr.style "flex-direction" "row"
-        , Attr.style "min-height" "400px"
+        , Attr.style "min-height" "1000px"
         ]
         [ viewBox Blue model
         , viewBox Yellow model
