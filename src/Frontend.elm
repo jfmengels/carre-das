@@ -141,23 +141,14 @@ view model =
                         ]
                     , bodyWrapper
                         [ Html.div
-                            [ backgroundColor color
-                            , Attr.style "color" "white"
-                            , Attr.style "font-size" "50px"
-                            , Attr.style "font-weight" "bold"
-                            , Attr.style "display" "flex"
-                            , Attr.style "flex" "1"
-                            , Attr.style "justify-content" "center"
-                            , Attr.style "flex-direction" "column"
-                            , Attr.style "margin" "20px"
-                            ]
-                            [ Html.div []
-                                [ if text == "" then
-                                    Html.text "En attente"
+                            (boxAttributes color (Events.onClick (ChangeRole (Player color))))
+                            [ viewBoxContent
+                                (if text == "" then
+                                    "En attente"
 
-                                  else
-                                    Html.text text
-                                ]
+                                 else
+                                    text
+                                )
                             ]
                         ]
                     ]
