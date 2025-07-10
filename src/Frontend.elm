@@ -139,20 +139,15 @@ view model =
                     viewRoleSelection
 
                 Host ->
-                    [ header
+                    [ header2
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
-                            |> Element.layout []
                         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
-                            |> Element.layout []
                         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-                            |> Element.layout []
                         , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
-                            |> Element.layout []
                         , button { onPress = Just Veil, label = Element.text "Cacher" }
-                            |> Element.layout []
                         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
-                            |> Element.layout []
                         ]
+                        |> Element.layout []
                     , viewBody model
                     ]
 
@@ -184,6 +179,14 @@ header children =
         , Attr.style "flex-wrap" "wrap"
         ]
         children
+
+
+header2 : List (Element msg) -> Element msg
+header2 =
+    Element.wrappedRow
+        [ Element.spacing 20
+        , Element.padding 20
+        ]
 
 
 viewRoleSelection : List (Html FrontendMsg)
