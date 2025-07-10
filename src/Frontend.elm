@@ -297,10 +297,11 @@ viewBox color model =
                 [ Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] [] ]
 
         ShowingAll ->
-            Html.div
-                (boxAttributes color (Attr.class ""))
-                [ viewBoxContent text |> Element.layout []
-                ]
+            box color
+                { onPress = Nothing
+                , label = text
+                }
+                |> Element.layout []
 
         Showing Nothing ->
             box color
@@ -311,14 +312,18 @@ viewBox color model =
 
         Showing (Just showingColor) ->
             if color == showingColor then
-                Html.div
-                    (boxAttributes color (Events.onClick (Show Nothing)))
-                    [ viewBoxContent text |> Element.layout [] ]
+                box color
+                    { onPress = Just (Show Nothing)
+                    , label = text
+                    }
+                    |> Element.layout []
 
             else
-                Html.div
-                    (boxAttributes color (Attr.class ""))
-                    [ Html.text "\u{00A0}" ]
+                box color
+                    { onPress = Nothing
+                    , label = "\u{00A0}"
+                    }
+                    |> Element.layout []
 
 
 box : Color -> { onPress : Maybe msg, label : String } -> Element msg
