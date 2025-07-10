@@ -36,7 +36,10 @@ type Role
 
 
 type alias BackendModel =
-    { message : String
+    { blue : String
+    , yellow : String
+    , red : String
+    , green : String
     }
 
 
@@ -49,11 +52,14 @@ type FrontendMsg
     | ChangedInput Color String
     | Show (Maybe Color)
     | ChangeRole Role
+    | Unveil
+    | Veil
     | NoOpFrontendMsg
 
 
 type ToBackend
     = NoOpToBackend
+    | SetConstraints { blue : String, yellow : String, red : String, green : String }
 
 
 type BackendMsg
@@ -62,3 +68,4 @@ type BackendMsg
 
 type ToFrontend
     = NoOpToFrontend
+    | SendConstraintsToFrontend { blue : String, yellow : String, red : String, green : String }

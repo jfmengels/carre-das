@@ -1,6 +1,6 @@
 module Backend exposing (..)
 
-import Lamdera exposing (ClientId, SessionId)
+import Lamdera exposing (ClientId, SessionId, broadcast)
 import Types exposing (..)
 
 
@@ -19,7 +19,7 @@ app =
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { message = "Hello!" }
+    ( { blue = "", yellow = "", red = "", green = "" }
     , Cmd.none
     )
 
@@ -36,3 +36,9 @@ updateFromFrontend sessionId clientId msg model =
     case msg of
         NoOpToBackend ->
             ( model, Cmd.none )
+
+        SetConstraints constraints ->
+            ( constraints
+            , SendConstraintsToFrontend constraints
+                |> broadcast
+            )

@@ -5,7 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (Html)
 import Html.Attributes as Attr
 import Html.Events as Events
-import Lamdera
+import Lamdera exposing (sendToBackend)
 import Types exposing (..)
 import Url
 
@@ -64,6 +64,18 @@ update msg model =
         ShowAll ->
             ( { model | mode = ShowingAll }, Cmd.none )
 
+        Unveil ->
+            ( { model | mode = ShowingAll }
+            , SetConstraints { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
+                |> sendToBackend
+            )
+
+        Veil ->
+            ( { model | mode = Editing }
+            , SetConstraints { blue = "", yellow = "", red = "", green = "" }
+                |> sendToBackend
+            )
+
         Edit ->
             ( { model | mode = Editing }, Cmd.none )
 
@@ -99,6 +111,16 @@ updateFromBackend msg model =
         NoOpToFrontend ->
             ( model, Cmd.none )
 
+        SendConstraintsToFrontend constraints ->
+            ( { model
+                | blue = constraints.blue
+                , yellow = constraints.yellow
+                , red = constraints.red
+                , green = constraints.green
+              }
+            , Cmd.none
+            )
+
 
 view : Model -> Browser.Document FrontendMsg
 view model =
@@ -115,6 +137,8 @@ view model =
                         , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
                         , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
                         , Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+                        , Html.button [ Events.onClick Veil, Attr.style "font-size" "20px" ] [ Html.text "Cacher" ]
+                        , Html.button [ Events.onClick Unveil, Attr.style "font-size" "20px" ] [ Html.text "Dévoiler" ]
                         ]
                     , viewBody model
                     ]
