@@ -326,6 +326,7 @@ viewBoxContent text =
             [ Font.color (Element.rgb 1 1 1)
             , Font.size 50
             , Font.bold
+            , Font.center
             ]
             [ Element.text
                 (if String.isEmpty text then
