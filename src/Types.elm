@@ -8,6 +8,7 @@ import Url exposing (Url)
 type alias FrontendModel =
     { key : Key
     , mode : Mode
+    , role : Role
     , blue : String
     , yellow : String
     , red : String
@@ -28,6 +29,12 @@ type Mode
     | Showing (Maybe Color)
 
 
+type Role
+    = UndecidedUserType
+    | Host
+    | Player Color
+
+
 type alias BackendModel =
     { message : String
     }
@@ -41,6 +48,7 @@ type FrontendMsg
     | Edit
     | ChangedInput Color String
     | Show (Maybe Color)
+    | ChangeRole Role
     | NoOpFrontendMsg
 
 

@@ -30,6 +30,7 @@ init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     ( { key = key
       , mode = Showing Nothing
+      , role = UndecidedUserType
       , blue = ""
       , yellow = ""
       , red = ""
@@ -88,6 +89,9 @@ update msg model =
         Show maybeColor ->
             ( { model | mode = Showing maybeColor }, Cmd.none )
 
+        ChangeRole role ->
+            ( { model | role = role }, Cmd.none )
+
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
 updateFromBackend msg model =
@@ -100,22 +104,93 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        [ Html.div [ Attr.style "height" "100%" ]
-            [ Html.div
-                [ Attr.style "height" "100%"
-                , Attr.style "padding" "20px 0 0 20px"
-                , Attr.style "display" "flex"
-                , Attr.style "gap" "20px"
-                , Attr.style "height" "40px"
+        case model.role of
+            UndecidedUserType ->
+                [ viewRoleSelection ]
+
+            Host ->
+                [ Html.div [ Attr.style "height" "100%" ]
+                    [ Html.div
+                        [ Attr.style "height" "100%"
+                        , Attr.style "padding" "20px 0 0 20px"
+                        , Attr.style "display" "flex"
+                        , Attr.style "gap" "20px"
+                        , Attr.style "height" "40px"
+                        ]
+                        [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
+                        , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
+                        , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
+                        , Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+                        ]
+                    , viewBody model
+                    ]
                 ]
-                [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
-                , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
-                , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
+
+            Player color ->
+                let
+                    text : String
+                    text =
+                        case color of
+                            Blue ->
+                                model.blue
+
+                            Yellow ->
+                                model.yellow
+
+                            Red ->
+                                model.red
+
+                            Green ->
+                                model.green
+                in
+                [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+                , Html.div
+                    (boxAttributes color (Attr.style "margin" "20px"))
+                    [ if text == "" then
+                        Html.text "En attente"
+
+                      else
+                        Html.text text
+                    ]
                 ]
-            , viewBody model
+    }
+
+
+viewRoleSelection : Html FrontendMsg
+viewRoleSelection =
+    Html.div
+        [ Attr.style "display" "flex"
+        , Attr.style "flex-wrap" "wrap"
+        , Attr.style "flex-direction" "row"
+        , Attr.style "justify-content" "center"
+        , Attr.style "align-items" "center"
+        , Attr.style "height" "100%"
+        , Attr.style "width" "100%"
+        , Attr.style "max-width" "200px"
+        , Attr.style "min-height" "1000px"
+        ]
+        [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
+        , Html.span [ Attr.style "font-size" "20px" ] [ Html.text "Je suis joueur :" ]
+        , Html.div
+            [ Attr.style "display" "flex"
+            , Attr.style "flex-wrap" "wrap"
+            , Attr.style "flex-direction" "row"
+            , Attr.style "min-height" "1000px"
+            ]
+            [ viewPlayerSelectButton Blue
+            , viewPlayerSelectButton Yellow
+            , viewPlayerSelectButton Red
+            , viewPlayerSelectButton Green
             ]
         ]
-    }
+
+
+viewPlayerSelectButton : Color -> Html FrontendMsg
+viewPlayerSelectButton color =
+    Html.div
+        (boxAttributes color (Events.onClick (ChangeRole (Player color))))
+        [ Html.div [ Attr.style "opacity" "0" ] [ viewBoxContent "Rouge" ]
+        ]
 
 
 viewBody : Model -> Html FrontendMsg
