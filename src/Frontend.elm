@@ -4,6 +4,7 @@ import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Html exposing (Html)
 import Html.Attributes as Attr
+import Html.Events as Events
 import Lamdera
 import Types exposing (..)
 import Url
@@ -28,6 +29,7 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     ( { key = key
+      , mode = Showing Nothing
       , blue = ""
       , yellow = ""
       , red = ""
@@ -58,6 +60,34 @@ update msg model =
         NoOpFrontendMsg ->
             ( model, Cmd.none )
 
+        ShowAll ->
+            ( { model | mode = ShowingAll }, Cmd.none )
+
+        Edit ->
+            ( { model | mode = Editing }, Cmd.none )
+
+        ChangedInput color text ->
+            ( case color of
+                Blue ->
+                    { model | blue = text }
+
+                Yellow ->
+                    { model | yellow = text }
+
+                Red ->
+                    { model | red = text }
+
+                Green ->
+                    { model | green = text }
+            , Cmd.none
+            )
+
+        HideAll ->
+            ( { model | mode = Showing Nothing }, Cmd.none )
+
+        Show maybeColor ->
+            ( { model | mode = Showing maybeColor }, Cmd.none )
+
 
 updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
 updateFromBackend msg model =
@@ -70,12 +100,17 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        [ Html.div [ Attr.style "height" "100%" ] [ viewBody model ]
+        [ Html.div [ Attr.style "height" "100%" ]
+            [ Html.button [ Events.onClick Edit ] [ Html.text "Editer" ]
+            , Html.button [ Events.onClick ShowAll ] [ Html.text "Tout voir" ]
+            , Html.button [ Events.onClick HideAll ] [ Html.text "Tout cacher" ]
+            , viewBody model
+            ]
         ]
     }
 
 
-viewBody : Model -> Html msg
+viewBody : Model -> Html FrontendMsg
 viewBody model =
     Html.div
         [ Attr.style "display" "flex"
@@ -90,14 +125,7 @@ viewBody model =
         ]
 
 
-type Color
-    = Blue
-    | Yellow
-    | Red
-    | Green
-
-
-viewBox : Color -> Model -> Html msg
+viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Html FrontendMsg
 viewBox color model =
     let
         text : String
@@ -124,20 +152,56 @@ viewBox color model =
         , Attr.style "justify-content" "center"
         , Attr.style "flex-direction" "column"
         , Attr.style "margin" "20px"
-        ]
-        [ Html.div
-            [ Attr.style "display" "flex"
-            , Attr.style "justify-content" "center"
-            , Attr.style "flex-direction" "row"
-            ]
-            [ Html.text
-                (if String.isEmpty text then
-                    "Réserve"
+        , case model.mode of
+            Editing ->
+                Attr.class ""
 
-                 else
-                    text
-                )
-            ]
+            ShowingAll ->
+                Attr.class ""
+
+            Showing Nothing ->
+                Events.onClick (Show (Just color))
+
+            Showing (Just showColor) ->
+                if color == showColor then
+                    Events.onClick (Show Nothing)
+
+                else
+                    Attr.class ""
+        ]
+        [ case model.mode of
+            Editing ->
+                Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] []
+
+            ShowingAll ->
+                viewBoxContent text
+
+            Showing (Just showingColor) ->
+                if showingColor == color then
+                    viewBoxContent text
+
+                else
+                    viewBoxContent ""
+
+            Showing Nothing ->
+                viewBoxContent "Révéler"
+        ]
+
+
+viewBoxContent : String -> Html msg
+viewBoxContent text =
+    Html.div
+        [ Attr.style "display" "flex"
+        , Attr.style "justify-content" "center"
+        , Attr.style "flex-direction" "row"
+        ]
+        [ Html.text
+            (if String.isEmpty text then
+                "En réserve"
+
+             else
+                text
+            )
         ]
 
 
@@ -149,7 +213,7 @@ backgroundColor color =
                 "blue"
 
             Yellow ->
-                "yellow"
+                "orange"
 
             Red ->
                 "red"

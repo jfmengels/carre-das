@@ -7,11 +7,25 @@ import Url exposing (Url)
 
 type alias FrontendModel =
     { key : Key
+    , mode : Mode
     , blue : String
     , yellow : String
     , red : String
     , green : String
     }
+
+
+type Color
+    = Blue
+    | Yellow
+    | Red
+    | Green
+
+
+type Mode
+    = Editing
+    | ShowingAll
+    | Showing (Maybe Color)
 
 
 type alias BackendModel =
@@ -22,6 +36,11 @@ type alias BackendModel =
 type FrontendMsg
     = UrlClicked UrlRequest
     | UrlChanged Url
+    | ShowAll
+    | HideAll
+    | Edit
+    | ChangedInput Color String
+    | Show (Maybe Color)
     | NoOpFrontendMsg
 
 
