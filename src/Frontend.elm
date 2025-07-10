@@ -143,43 +143,39 @@ viewBox color model =
                 Green ->
                     model.green
     in
-    Html.div
-        (boxAttributes color
-            (case model.mode of
-                Editing ->
-                    Attr.class ""
+    case model.mode of
+        Editing ->
+            Html.div
+                (boxAttributes color (Attr.class ""))
+                [ Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] [] ]
 
-                ShowingAll ->
-                    Attr.class ""
+        ShowingAll ->
+            Html.div
+                (boxAttributes color (Attr.class ""))
+                [ viewBoxContent text
+                ]
 
-                Showing Nothing ->
-                    Events.onClick (Show (Just color))
+        Showing Nothing ->
+            Html.div
+                (boxAttributes color (Events.onClick (Show (Just color))))
+                [ viewBoxContent "Révéler" ]
 
-                Showing (Just showColor) ->
-                    if color == showColor then
+        Showing (Just showingColor) ->
+            Html.div
+                (boxAttributes color
+                    (if color == showingColor then
                         Events.onClick (Show Nothing)
 
-                    else
+                     else
                         Attr.class ""
-            )
-        )
-        [ case model.mode of
-            Editing ->
-                Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] []
-
-            ShowingAll ->
-                viewBoxContent text
-
-            Showing (Just showingColor) ->
-                if showingColor == color then
+                    )
+                )
+                [ if showingColor == color then
                     viewBoxContent text
 
-                else
+                  else
                     viewBoxContent ""
-
-            Showing Nothing ->
-                viewBoxContent "Révéler"
-        ]
+                ]
 
 
 boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
