@@ -101,9 +101,17 @@ view model =
     { title = ""
     , body =
         [ Html.div [ Attr.style "height" "100%" ]
-            [ Html.button [ Events.onClick Edit ] [ Html.text "Editer" ]
-            , Html.button [ Events.onClick ShowAll ] [ Html.text "Tout voir" ]
-            , Html.button [ Events.onClick HideAll ] [ Html.text "Tout cacher" ]
+            [ Html.div
+                [ Attr.style "height" "100%"
+                , Attr.style "padding" "20px 0 0 20px"
+                , Attr.style "display" "flex"
+                , Attr.style "gap" "20px"
+                , Attr.style "height" "40px"
+                ]
+                [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
+                , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
+                , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
+                ]
             , viewBody model
             ]
         ]
@@ -176,6 +184,7 @@ boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
 boxAttributes color eventHandler =
     [ backgroundColor color
     , Attr.style "color" "white"
+    , Attr.style "font-size" "50px"
     , Attr.style "font-weight" "bold"
     , Attr.style "display" "flex"
     , Attr.style "flex-basis" "calc(50% - 40px)"
