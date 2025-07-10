@@ -7,7 +7,10 @@ import Url exposing (Url)
 
 type alias FrontendModel =
     { key : Key
-    , message : String
+    , blue : String
+    , yellow : String
+    , red : String
+    , green : String
     }
 
 

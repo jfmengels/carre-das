@@ -2,7 +2,7 @@ module Frontend exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
-import Html
+import Html exposing (Html)
 import Html.Attributes as Attr
 import Lamdera
 import Types exposing (..)
@@ -28,7 +28,10 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     ( { key = key
-      , message = "Welcome to Lamdera! You're looking at the auto-generated base implementation. Check out src/Frontend.elm to start coding!"
+      , blue = ""
+      , yellow = ""
+      , red = ""
+      , green = ""
       }
     , Cmd.none
     )
@@ -67,13 +70,90 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        [ Html.div [ Attr.style "text-align" "center", Attr.style "padding-top" "40px" ]
-            [ Html.img [ Attr.src "https://lamdera.app/lamdera-logo-black.png", Attr.width 150 ] []
-            , Html.div
-                [ Attr.style "font-family" "sans-serif"
-                , Attr.style "padding-top" "40px"
-                ]
-                [ Html.text model.message ]
-            ]
+        [ Html.div [ Attr.style "height" "100%" ] [ viewBody model ]
         ]
     }
+
+
+viewBody : Model -> Html msg
+viewBody model =
+    Html.div
+        [ Attr.style "display" "flex"
+        , Attr.style "flex-wrap" "wrap"
+        , Attr.style "flex-direction" "row"
+        , Attr.style "min-height" "400px"
+        ]
+        [ viewBox Blue model
+        , viewBox Yellow model
+        , viewBox Red model
+        , viewBox Green model
+        ]
+
+
+type Color
+    = Blue
+    | Yellow
+    | Red
+    | Green
+
+
+viewBox : Color -> Model -> Html msg
+viewBox color model =
+    let
+        text : String
+        text =
+            case color of
+                Blue ->
+                    model.blue
+
+                Yellow ->
+                    model.yellow
+
+                Red ->
+                    model.red
+
+                Green ->
+                    model.green
+    in
+    Html.div
+        [ backgroundColor color
+        , Attr.style "color" "white"
+        , Attr.style "font-weight" "bold"
+        , Attr.style "display" "flex"
+        , Attr.style "flex-basis" "calc(50% - 40px)"
+        , Attr.style "justify-content" "center"
+        , Attr.style "flex-direction" "column"
+        , Attr.style "margin" "20px"
+        ]
+        [ Html.div
+            [ Attr.style "display" "flex"
+            , Attr.style "justify-content" "center"
+            , Attr.style "flex-direction" "row"
+            ]
+            [ Html.text
+                (if String.isEmpty text then
+                    "Réserve"
+
+                 else
+                    text
+                )
+            ]
+        ]
+
+
+backgroundColor : Color -> Html.Attribute msg
+backgroundColor color =
+    Attr.style "background-color"
+        (case color of
+            Blue ->
+                "blue"
+
+            Yellow ->
+                "yellow"
+
+            Red ->
+                "red"
+
+            Green ->
+                "green"
+        )
