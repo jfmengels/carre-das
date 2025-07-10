@@ -107,7 +107,7 @@ view model =
         [ Html.div [ Attr.style "height" "100%" ]
             (case model.role of
                 UndecidedUserType ->
-                    [ viewRoleSelection ]
+                    viewRoleSelection
 
                 Host ->
                     [ header
@@ -183,34 +183,18 @@ header children =
         children
 
 
-viewRoleSelection : Html FrontendMsg
+viewRoleSelection : List (Html FrontendMsg)
 viewRoleSelection =
-    Html.div
-        [ Attr.style "display" "flex"
-        , Attr.style "flex-wrap" "wrap"
-        , Attr.style "flex-direction" "row"
-        , Attr.style "justify-content" "center"
-        , Attr.style "align-items" "center"
-        , Attr.style "height" "100%"
-        , Attr.style "width" "100%"
-        , Attr.style "max-width" "200px"
-        , Attr.style "min-height" "1000px"
+    [ header
+        [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
         ]
-        [ header
-            [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
-            ]
-        , Html.div
-            [ Attr.style "display" "flex"
-            , Attr.style "flex-wrap" "wrap"
-            , Attr.style "flex-direction" "row"
-            , Attr.style "min-height" "1000px"
-            ]
-            [ viewPlayerSelectButton Blue
-            , viewPlayerSelectButton Yellow
-            , viewPlayerSelectButton Red
-            , viewPlayerSelectButton Green
-            ]
+    , bodyWrapper
+        [ viewPlayerSelectButton Blue
+        , viewPlayerSelectButton Yellow
+        , viewPlayerSelectButton Red
+        , viewPlayerSelectButton Green
         ]
+    ]
 
 
 viewPlayerSelectButton : Color -> Html FrontendMsg
