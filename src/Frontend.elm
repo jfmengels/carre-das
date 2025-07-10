@@ -161,21 +161,15 @@ viewBox color model =
                 [ viewBoxContent "Révéler" ]
 
         Showing (Just showingColor) ->
-            Html.div
-                (boxAttributes color
-                    (if color == showingColor then
-                        Events.onClick (Show Nothing)
+            if color == showingColor then
+                Html.div
+                    (boxAttributes color (Events.onClick (Show Nothing)))
+                    [ viewBoxContent text ]
 
-                     else
-                        Attr.class ""
-                    )
-                )
-                [ if showingColor == color then
-                    viewBoxContent text
-
-                  else
-                    viewBoxContent ""
-                ]
+            else
+                Html.div
+                    (boxAttributes color (Attr.class ""))
+                    [ viewBoxContent "" ]
 
 
 boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
