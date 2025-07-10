@@ -143,14 +143,41 @@ view model =
                             Green ->
                                 model.green
                 in
-                [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
-                , Html.div
-                    (boxAttributes color (Attr.style "margin" "20px"))
-                    [ if text == "" then
-                        Html.text "En attente"
+                [ Html.div [ Attr.style "height" "100%" ]
+                    [ Html.div
+                        [ Attr.style "padding" "20px 0 0 20px"
+                        , Attr.style "display" "flex"
+                        , Attr.style "gap" "20px"
+                        , Attr.style "height" "40px"
+                        ]
+                        [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+                        ]
+                    , Html.div
+                        [ Attr.style "display" "flex"
+                        , Attr.style "flex-wrap" "wrap"
+                        , Attr.style "flex-direction" "row"
+                        , Attr.style "min-height" "1000px"
+                        ]
+                        [ Html.div
+                            [ backgroundColor color
+                            , Attr.style "color" "white"
+                            , Attr.style "font-size" "50px"
+                            , Attr.style "font-weight" "bold"
+                            , Attr.style "display" "flex"
+                            , Attr.style "flex" "1"
+                            , Attr.style "justify-content" "center"
+                            , Attr.style "flex-direction" "column"
+                            , Attr.style "margin" "20px"
+                            ]
+                            [ Html.div []
+                                [ if text == "" then
+                                    Html.text "En attente"
 
-                      else
-                        Html.text text
+                                  else
+                                    Html.text text
+                                ]
+                            ]
+                        ]
                     ]
                 ]
     }
@@ -250,7 +277,7 @@ viewBox color model =
 
             else
                 Html.div
-                    (boxAttributes color (Attr.style "margin" "20px"))
+                    (boxAttributes color (Attr.class ""))
                     [ Html.text "\u{00A0}" ]
 
 
