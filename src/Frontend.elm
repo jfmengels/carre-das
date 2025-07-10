@@ -170,7 +170,6 @@ viewRoleSelection =
         , Attr.style "min-height" "1000px"
         ]
         [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
-        , Html.span [ Attr.style "font-size" "20px" ] [ Html.text "Je suis joueur :" ]
         , Html.div
             [ Attr.style "display" "flex"
             , Attr.style "flex-wrap" "wrap"
@@ -189,7 +188,7 @@ viewPlayerSelectButton : Color -> Html FrontendMsg
 viewPlayerSelectButton color =
     Html.div
         (boxAttributes color (Events.onClick (ChangeRole (Player color))))
-        [ Html.div [ Attr.style "opacity" "0" ] [ viewBoxContent "Rouge" ]
+        [ viewBoxContent "Joueur"
         ]
 
 
