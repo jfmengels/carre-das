@@ -189,6 +189,7 @@ header children =
         , Attr.style "display" "flex"
         , Attr.style "gap" "20px"
         , Attr.style "height" "40px"
+        , Attr.style "flex-wrap" "wrap"
         ]
         children
 
