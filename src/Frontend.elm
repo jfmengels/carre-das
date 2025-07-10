@@ -165,7 +165,7 @@ view model =
                         ]
                     , bodyWrapper
                         [ Html.div
-                            (boxAttributes color (Events.onClick (ChangeRole (Player color))))
+                            (fullPageBoxAttributes color (Events.onClick (ChangeRole (Player color))))
                             [ viewBoxContent
                                 (if text == "" then
                                     "En attente"
@@ -284,14 +284,26 @@ viewBox color model =
                     [ Html.text "\u{00A0}" ]
 
 
+fullPageBoxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
+fullPageBoxAttributes color eventHandler =
+    Attr.style "width" "100%"
+        :: Attr.style "flex" "1"
+        :: sharedBoxAttributes color eventHandler
+
+
 boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
 boxAttributes color eventHandler =
+    Attr.style "flex-basis" "calc(50% - 40px)"
+        :: sharedBoxAttributes color eventHandler
+
+
+sharedBoxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
+sharedBoxAttributes color eventHandler =
     [ backgroundColor color
     , Attr.style "color" "white"
     , Attr.style "font-size" "50px"
     , Attr.style "font-weight" "bold"
     , Attr.style "display" "flex"
-    , Attr.style "flex-basis" "calc(50% - 40px)"
     , Attr.style "justify-content" "center"
     , Attr.style "flex-direction" "column"
     , Attr.style "margin" "20px"
