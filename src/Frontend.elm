@@ -95,9 +95,6 @@ update msg model =
             , Cmd.none
             )
 
-        HideAll ->
-            ( { model | mode = Showing Nothing }, Cmd.none )
-
         Show maybeColor ->
             ( { model | mode = Showing maybeColor }, Cmd.none )
 
@@ -140,7 +137,7 @@ view model =
                     [ header
                         [ Html.button [ Events.onClick Edit, Attr.style "font-size" "20px" ] [ Html.text "Editer" ]
                         , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
-                        , Html.button [ Events.onClick HideAll, Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
+                        , Html.button [ Events.onClick (Show Nothing), Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
                         , Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
                         , Html.button [ Events.onClick Veil, Attr.style "font-size" "20px" ] [ Html.text "Cacher" ]
                         , Html.button [ Events.onClick Unveil, Attr.style "font-size" "20px" ] [ Html.text "Dévoiler" ]

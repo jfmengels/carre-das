@@ -48,7 +48,6 @@ type FrontendMsg
     = UrlClicked UrlRequest
     | UrlChanged Url
     | ShowAll
-    | HideAll
     | Edit
     | ChangedInput Color String
     | Show (Maybe Color)
