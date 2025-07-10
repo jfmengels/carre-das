@@ -112,14 +112,19 @@ updateFromBackend msg model =
             ( model, Cmd.none )
 
         SendConstraintsToFrontend constraints ->
-            ( { model
-                | blue = constraints.blue
-                , yellow = constraints.yellow
-                , red = constraints.red
-                , green = constraints.green
-              }
-            , Cmd.none
-            )
+            case model.role of
+                Host ->
+                    ( model, Cmd.none )
+
+                _ ->
+                    ( { model
+                        | blue = constraints.blue
+                        , yellow = constraints.yellow
+                        , red = constraints.red
+                        , green = constraints.green
+                      }
+                    , Cmd.none
+                    )
 
 
 view : Model -> Browser.Document FrontendMsg
