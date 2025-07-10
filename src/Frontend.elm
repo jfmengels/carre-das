@@ -133,12 +133,14 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        [ Html.div [ Attr.style "height" "100%" ]
-            (case model.role of
-                UndecidedUserType ->
+        case model.role of
+            UndecidedUserType ->
+                [ Html.div [ Attr.style "height" "100%" ]
                     viewRoleSelection
+                ]
 
-                Host ->
+            Host ->
+                [ Html.div [ Attr.style "height" "100%" ]
                     [ header2
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
                         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
@@ -150,11 +152,12 @@ view model =
                         |> Element.layout []
                     , viewBody model
                     ]
+                ]
 
-                Player color ->
-                    viewPlayerConstraint color model
-            )
-        ]
+            Player color ->
+                [ Html.div [ Attr.style "height" "100%" ]
+                    (viewPlayerConstraint color model)
+                ]
     }
 
 
