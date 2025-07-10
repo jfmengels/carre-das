@@ -139,12 +139,7 @@ view model =
                     [ header
                         [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
                         ]
-                    , Html.div
-                        [ Attr.style "display" "flex"
-                        , Attr.style "flex-wrap" "wrap"
-                        , Attr.style "flex-direction" "row"
-                        , Attr.style "min-height" "1000px"
-                        ]
+                    , bodyWrapper
                         [ Html.div
                             [ backgroundColor color
                             , Attr.style "color" "white"
