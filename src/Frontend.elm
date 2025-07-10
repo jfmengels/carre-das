@@ -148,39 +148,7 @@ view model =
                     ]
 
                 Player color ->
-                    let
-                        text : String
-                        text =
-                            case color of
-                                Blue ->
-                                    model.blue
-
-                                Yellow ->
-                                    model.yellow
-
-                                Red ->
-                                    model.red
-
-                                Green ->
-                                    model.green
-                    in
-                    [ header
-                        [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
-                        ]
-                    , bodyWrapper
-                        [ Html.div
-                            (fullPageBoxAttributes color (Events.onClick (ChangeRole (Player color))))
-                            [ viewBoxContent
-                                (if text == "" then
-                                    "En attente"
-
-                                 else
-                                    text
-                                )
-                                |> Element.layout []
-                            ]
-                        ]
-                    ]
+                    viewPlayerConstraint color model
             )
         ]
     }
@@ -219,6 +187,43 @@ viewPlayerSelectButton color =
         (boxAttributes color (Events.onClick (ChangeRole (Player color))))
         [ viewBoxContent "Joueur" |> Element.layout []
         ]
+
+
+viewPlayerConstraint : Color -> Model -> List (Html FrontendMsg)
+viewPlayerConstraint color model =
+    let
+        text : String
+        text =
+            case color of
+                Blue ->
+                    model.blue
+
+                Yellow ->
+                    model.yellow
+
+                Red ->
+                    model.red
+
+                Green ->
+                    model.green
+    in
+    [ header
+        [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+        ]
+    , bodyWrapper
+        [ Html.div
+            (fullPageBoxAttributes color (Events.onClick (ChangeRole (Player color))))
+            [ viewBoxContent
+                (if text == "" then
+                    "En attente"
+
+                 else
+                    text
+                )
+                |> Element.layout []
+            ]
+        ]
+    ]
 
 
 viewBody : Model -> Html FrontendMsg
