@@ -2,6 +2,8 @@ module Frontend exposing (..)
 
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
+import Element
+import Element.Font as Font
 import Html exposing (Html)
 import Html.Attributes as Attr
 import Html.Events as Events
@@ -315,19 +317,25 @@ sharedBoxAttributes color eventHandler =
 
 viewBoxContent : String -> Html msg
 viewBoxContent text =
-    Html.div
-        [ Attr.style "display" "flex"
-        , Attr.style "justify-content" "center"
-        , Attr.style "flex-direction" "row"
+    Element.column
+        [ Element.centerX
+        , Element.centerY
         ]
-        [ Html.text
-            (if String.isEmpty text then
-                "En réserve"
+        [ Element.paragraph
+            [ Font.color (Element.rgb 1 1 1)
+            , Font.size 50
+            , Font.bold
+            ]
+            [ Element.text
+                (if String.isEmpty text then
+                    "En réserve"
 
-             else
-                text
-            )
+                 else
+                    text
+                )
+            ]
         ]
+        |> Element.layout []
 
 
 backgroundColor : Color -> Html.Attribute msg
