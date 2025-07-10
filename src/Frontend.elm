@@ -142,11 +142,16 @@ view model =
                     [ header
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
                             |> Element.layout []
-                        , Html.button [ Events.onClick ShowAll, Attr.style "font-size" "20px" ] [ Html.text "Tout voir" ]
-                        , Html.button [ Events.onClick (Show Nothing), Attr.style "font-size" "20px" ] [ Html.text "Tout cacher" ]
-                        , Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
-                        , Html.button [ Events.onClick Veil, Attr.style "font-size" "20px" ] [ Html.text "Cacher" ]
-                        , Html.button [ Events.onClick Unveil, Attr.style "font-size" "20px" ] [ Html.text "Dévoiler" ]
+                        , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
+                            |> Element.layout []
+                        , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
+                            |> Element.layout []
+                        , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
+                            |> Element.layout []
+                        , button { onPress = Just Veil, label = Element.text "Cacher" }
+                            |> Element.layout []
+                        , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
+                            |> Element.layout []
                         ]
                     , viewBody model
                     ]
