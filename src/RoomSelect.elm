@@ -42,32 +42,45 @@ update navKey msg model =
 
 view : RoomSelectModel -> List (Element RoomSelectMsg)
 view { input, inputSubmitted } =
-    [ Element.column [ Element.centerX, Element.centerY ]
+    [ Element.column
+        [ Element.centerX
+        , Element.centerY
+        , Element.spacing 5
+        ]
         [ if inputSubmitted && String.isEmpty input then
             Element.el
-                [ Font.color (Element.rgb 1 0 0) ]
+                [ Font.color (Element.rgb 1 0 0)
+                , Element.centerX
+                , Element.centerY
+                ]
                 (Element.text "ne doit pas être vide")
 
           else
             Element.none
-        , Element.row []
-            [ Element.Input.text
-                [ Element.height Element.fill
-                , Element.width Element.fill
-                , Element.centerX
-                , Element.centerY
-                , onEnter Submit
-                ]
-                { onChange = ChangedRoomSelectInput
-                , text = input
-                , placeholder = Just (Element.Input.placeholder [] (Element.text "e.g. 1234"))
-                , label = Element.Input.labelAbove [] (Element.text "Nom de chambre")
-                }
-            , button
+        , Element.Input.text
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , onEnter Submit
+            ]
+            { onChange = ChangedRoomSelectInput
+            , text = input
+            , placeholder = Just (Element.Input.placeholder [] (Element.text "e.g. 1234"))
+            , label =
+                Element.Input.labelAbove
+                    [ Element.centerX
+                    , Element.centerY
+                    ]
+                    (Element.text "Nom de chambre")
+            }
+        , Element.el
+            [ Element.centerX
+            , Element.centerY
+            ]
+            (button
                 { onPress = Just Submit
                 , label = Element.text "Valider"
                 }
-            ]
+            )
         ]
     ]
 
