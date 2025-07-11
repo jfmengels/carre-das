@@ -197,9 +197,10 @@ header2 =
 
 viewRoleSelection : List (Html FrontendMsg)
 viewRoleSelection =
-    [ header
-        [ Html.button [ Events.onClick (ChangeRole Host), Attr.style "font-size" "20px" ] [ Html.text "Je suis hôte 🪄" ]
+    [ header2
+        [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
         ]
+        |> Element.layout []
     , bodyWrapper
         [ viewPlayerSelectButton Blue
         , viewPlayerSelectButton Yellow
