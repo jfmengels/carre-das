@@ -69,7 +69,7 @@ updateFromFrontend sessionId clientId msg model =
         SetConstraints roomId constraints ->
             case SeqDict.get roomId model.rooms of
                 Nothing ->
-                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId emptyConstraints) model.rooms }, Cmd.none )
+                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId constraints) model.rooms }, Cmd.none )
 
                 Just room ->
                     ( { model
