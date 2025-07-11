@@ -173,27 +173,22 @@ viewPlayerSelectButton color =
 
 viewPlayerConstraint : Color -> RoomModel -> List (Element RoomMsg)
 viewPlayerConstraint color model =
-    let
-        text : String
-        text =
-            case color of
-                Blue ->
-                    model.blue
-
-                Yellow ->
-                    model.yellow
-
-                Red ->
-                    model.red
-
-                Green ->
-                    model.green
-    in
     [ box color
         { onPress = Just (ChangeRole UndecidedUserType)
         , label =
             if model.constraintsDisplayed then
-                text
+                case color of
+                    Blue ->
+                        model.blue
+
+                    Yellow ->
+                        model.yellow
+
+                    Red ->
+                        model.red
+
+                    Green ->
+                        model.green
 
             else
                 "En attente"
