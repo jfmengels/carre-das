@@ -1,0 +1,79 @@
+module RoomSelect exposing (..)
+
+import Browser.Navigation
+import Element exposing (Element)
+import Element.Background as Background
+import Element.Border as Border
+import Element.Font as Font
+import Element.Input
+import Types exposing (..)
+
+
+init : RoomSelectModel
+init =
+    { input = ""
+    , inputSubmitted = False
+    }
+
+
+update : Browser.Navigation.Key -> RoomSelectMsg -> RoomSelectModel -> ( RoomSelectModel, Cmd msg )
+update navKey msg model =
+    case msg of
+        ChangedRoomSelectInput input ->
+            ( { input = input
+              , inputSubmitted = False
+              }
+            , Cmd.none
+            )
+
+        Submit ->
+            if String.isEmpty model.input then
+                ( { input = model.input
+                  , inputSubmitted = True
+                  }
+                , Cmd.none
+                )
+
+            else
+                ( model, Browser.Navigation.pushUrl navKey ("/room/" ++ model.input) )
+
+
+view : RoomSelectModel -> List (Element RoomSelectMsg)
+view { input, inputSubmitted } =
+    [ Element.column [ Element.centerX, Element.centerY ]
+        [ if inputSubmitted && String.isEmpty input then
+            Element.el
+                [ Font.color (Element.rgb 1 0 0) ]
+                (Element.text "ne doit pas être vide")
+
+          else
+            Element.none
+        , Element.row []
+            [ Element.Input.text
+                [ Element.height Element.fill
+                , Element.width Element.fill
+                , Element.centerX
+                , Element.centerY
+                ]
+                { onChange = ChangedRoomSelectInput
+                , text = input
+                , placeholder = Just (Element.Input.placeholder [] (Element.text "e.g. 1234"))
+                , label = Element.Input.labelAbove [] (Element.text "Nom de chambre")
+                }
+            , button
+                { onPress = Just Submit
+                , label = Element.text "Valider"
+                }
+            ]
+        ]
+    ]
+
+
+button : { onPress : Maybe msg, label : Element msg } -> Element msg
+button =
+    Element.Input.button
+        [ Border.width 1
+        , Border.rounded 3
+        , Element.padding 5
+        , Background.color (Element.rgb 0.95 0.95 0.95)
+        ]

@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Element exposing (Element)
 import Lamdera
 import Room
+import RoomSelect
 import Types exposing (..)
 import Url exposing (Url)
 
@@ -37,7 +38,7 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd msg )
 init url key =
     ( { key = key
-      , state = InRoom (Room.init (RoomId "TODO"))
+      , state = RoomSelect RoomSelect.init
       }
     , Cmd.none
     )
@@ -72,6 +73,23 @@ update msg model =
                     , Cmd.map RoomMsg cmd
                     )
 
+                RoomSelect _ ->
+                    ( model, Cmd.none )
+
+        RoomSelectMsg roomSelectMsg ->
+            case model.state of
+                RoomSelect roomSelectModel ->
+                    let
+                        ( roomSelect, cmd ) =
+                            RoomSelect.update model.key roomSelectMsg roomSelectModel
+                    in
+                    ( { model | state = RoomSelect roomSelect }
+                    , cmd
+                    )
+
+                InRoom _ ->
+                    ( model, Cmd.none )
+
         NoOpFrontendMsg ->
             ( model, Cmd.none )
 
@@ -89,6 +107,9 @@ updateFromBackend msg model =
                     , Cmd.none
                     )
 
+                RoomSelect _ ->
+                    ( model, Cmd.none )
+
 
 view : Model -> Browser.Document FrontendMsg
 view model =
@@ -102,6 +123,16 @@ view model =
                     ]
                     (Room.view room)
                     |> Element.map RoomMsg
+                    |> Element.layout []
+                ]
+
+            RoomSelect roomSelect ->
+                [ Element.column
+                    [ Element.height Element.fill
+                    , Element.width Element.fill
+                    ]
+                    (RoomSelect.view roomSelect)
+                    |> Element.map RoomSelectMsg
                     |> Element.layout []
                 ]
     }

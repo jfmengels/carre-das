@@ -13,7 +13,14 @@ type alias FrontendModel =
 
 
 type State
-    = InRoom RoomModel
+    = RoomSelect RoomSelectModel
+    | InRoom RoomModel
+
+
+type alias RoomSelectModel =
+    { input : String
+    , inputSubmitted : Bool
+    }
 
 
 type alias RoomModel =
@@ -61,8 +68,14 @@ type alias BackendModel =
 type FrontendMsg
     = UrlClicked UrlRequest
     | UrlChanged Url
+    | RoomSelectMsg RoomSelectMsg
     | RoomMsg RoomMsg
     | NoOpFrontendMsg
+
+
+type RoomSelectMsg
+    = ChangedRoomSelectInput String
+    | Submit
 
 
 type RoomMsg
