@@ -292,9 +292,21 @@ viewBox color model =
     in
     case model.mode of
         Editing ->
-            Html.div
-                (boxAttributes color (Attr.class ""))
-                [ Html.textarea [ Events.onInput (ChangedInput color), Attr.value text ] [] ]
+            Element.el
+                [ Element.centerX
+                , Element.centerY
+                , Element.height Element.fill
+                , Element.width Element.fill
+                , Background.color (backgroundColor2 color)
+                ]
+                (Element.Input.text []
+                    { onChange = ChangedInput color
+                    , text = text
+                    , placeholder = Nothing
+                    , label = Element.Input.labelHidden "Constraint"
+                    }
+                )
+                |> Element.layout []
 
         ShowingAll ->
             box color
