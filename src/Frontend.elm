@@ -140,7 +140,10 @@ view model =
                 ]
 
             Host ->
-                [ Html.div [ Attr.style "height" "100%" ]
+                [ Element.column
+                    [ Element.height Element.fill
+                    , Element.width Element.fill
+                    ]
                     [ header2
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
                         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
@@ -149,9 +152,9 @@ view model =
                         , button { onPress = Just Veil, label = Element.text "Cacher" }
                         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
                         ]
-                        |> Element.layout []
                     , viewBody model
                     ]
+                    |> Element.layout []
                 ]
 
             Player color ->
@@ -251,13 +254,29 @@ viewPlayerConstraint color model =
     ]
 
 
-viewBody : Model -> Html FrontendMsg
+viewBody : Model -> Element FrontendMsg
 viewBody model =
-    bodyWrapper
-        [ viewBox Blue model
-        , viewBox Yellow model
-        , viewBox Red model
-        , viewBox Green model
+    Element.column
+        [ Element.height Element.fill
+        , Element.width Element.fill
+        , Element.spacing 20
+        ]
+        [ Element.wrappedRow
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , Element.spacing 20
+            ]
+            [ viewBox Blue model
+            , viewBox Yellow model
+            ]
+        , Element.wrappedRow
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , Element.spacing 20
+            ]
+            [ viewBox Red model
+            , viewBox Green model
+            ]
         ]
 
 
@@ -272,7 +291,7 @@ bodyWrapper children =
         children
 
 
-viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Html FrontendMsg
+viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element FrontendMsg
 viewBox color model =
     let
         text : String
@@ -306,21 +325,18 @@ viewBox color model =
                     , label = Element.Input.labelHidden "Constraint"
                     }
                 )
-                |> Element.layout []
 
         ShowingAll ->
             box color
                 { onPress = Nothing
                 , label = text
                 }
-                |> Element.layout []
 
         Showing Nothing ->
             box color
                 { onPress = Just (Show (Just color))
                 , label = "Révéler"
                 }
-                |> Element.layout []
 
         Showing (Just showingColor) ->
             if color == showingColor then
@@ -328,14 +344,12 @@ viewBox color model =
                     { onPress = Just (Show Nothing)
                     , label = text
                     }
-                    |> Element.layout []
 
             else
                 box color
                     { onPress = Nothing
                     , label = "\u{00A0}"
                     }
-                    |> Element.layout []
 
 
 box : Color -> { onPress : Maybe msg, label : String } -> Element msg
