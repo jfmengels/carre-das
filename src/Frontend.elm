@@ -401,17 +401,22 @@ backgroundColor : Color -> Element.Color
 backgroundColor color =
     let
         ( r, g, b ) =
-            case color of
-                Blue ->
-                    ( 0, 0, 1 )
-
-                Yellow ->
-                    ( 1, 0.64, 0 )
-
-                Red ->
-                    ( 1, 0, 0 )
-
-                Green ->
-                    ( 0, 0.5, 0 )
+            rgb color
     in
     Element.rgb r g b
+
+
+rgb : Color -> ( number, Float, number )
+rgb color =
+    case color of
+        Blue ->
+            ( 0, 0, 1 )
+
+        Yellow ->
+            ( 1, 0.64, 0 )
+
+        Red ->
+            ( 1, 0, 0 )
+
+        Green ->
+            ( 0, 0.5, 0 )
