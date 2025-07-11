@@ -12,6 +12,7 @@
             "elm/html": "1.0.0",
             "elm/url": "1.0.0",
             "lamdera/codecs": "1.0.0",
+            "lamdera/containers": "1.0.0",
             "lamdera/core": "1.0.0",
             "lydell/elm-app-url": "1.0.4",
             "mdgriffith/elm-ui": "1.1.8"

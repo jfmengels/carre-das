@@ -1,7 +1,7 @@
 module Backend exposing (..)
 
-import Dict
 import Lamdera exposing (ClientId, SessionId, broadcast, sendToFrontend)
+import SeqDict
 import Set
 import Types exposing (..)
 
@@ -21,8 +21,8 @@ app =
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { rooms = Dict.empty
-      , connectedPlayers = Dict.empty
+    ( { rooms = SeqDict.empty
+      , connectedPlayers = SeqDict.empty
       }
     , Cmd.none
     )
@@ -35,7 +35,7 @@ update msg model =
             ( model, Cmd.none )
 
         OnDisconnect clientId ->
-            ( { model | connectedPlayers = Dict.map (\_ clientIds -> Set.remove clientId clientIds) model.connectedPlayers }
+            ( { model | connectedPlayers = SeqDict.map (\_ clientIds -> Set.remove clientId clientIds) model.connectedPlayers }
             , Cmd.none
             )
 
@@ -43,24 +43,24 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
-        RegisterToRoom (RoomId roomId) ->
+        RegisterToRoom roomId ->
             ( { model
                 | connectedPlayers =
-                    Dict.update
+                    SeqDict.update
                         roomId
                         (Maybe.withDefault Set.empty >> Set.insert clientId >> Just)
                         model.connectedPlayers
               }
-            , Dict.get roomId model.rooms
+            , SeqDict.get roomId model.rooms
                 |> Maybe.withDefault emptyConstraints
                 |> SendConstraintsToFrontend
                 |> sendToFrontend clientId
             )
 
-        SetConstraints (RoomId roomId) constraints ->
+        SetConstraints roomId constraints ->
             ( { model
                 | rooms =
-                    Dict.update roomId
+                    SeqDict.update roomId
                         (Maybe.withDefault emptyConstraints
                             >> (\previous ->
                                     Just { previous | blue = constraints.blue, yellow = constraints.yellow, red = constraints.red, green = constraints.green }

@@ -2,8 +2,8 @@ module Types exposing (..)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
-import Dict exposing (Dict)
 import Lamdera exposing (ClientId)
+import SeqDict exposing (SeqDict)
 import Set exposing (Set)
 import Url exposing (Url)
 
@@ -60,8 +60,8 @@ type Role
 
 
 type alias BackendModel =
-    { rooms : Dict String RoomConstraints
-    , connectedPlayers : Dict String (Set ClientId)
+    { rooms : SeqDict RoomId RoomConstraints
+    , connectedPlayers : SeqDict RoomId (Set ClientId)
     }
 
 
