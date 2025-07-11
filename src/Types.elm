@@ -8,6 +8,16 @@ import Url exposing (Url)
 
 type alias FrontendModel =
     { key : Key
+    , state : State
+    }
+
+
+type State
+    = InRoom RoomModel
+
+
+type alias RoomModel =
+    { roomId : RoomId
     , mode : Mode
     , role : Role
     , blue : String
@@ -15,6 +25,10 @@ type alias FrontendModel =
     , red : String
     , green : String
     }
+
+
+type RoomId
+    = RoomId String
 
 
 type Color
@@ -47,14 +61,18 @@ type alias BackendModel =
 type FrontendMsg
     = UrlClicked UrlRequest
     | UrlChanged Url
-    | ShowAll
+    | RoomMsg RoomMsg
+    | NoOpFrontendMsg
+
+
+type RoomMsg
+    = ShowAll
     | Edit
     | ChangedInput Color String
     | Show (Maybe Color)
     | ChangeRole Role
     | Unveil
     | Veil
-    | NoOpFrontendMsg
 
 
 type ToBackend
