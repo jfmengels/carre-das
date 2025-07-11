@@ -20,7 +20,9 @@ app =
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { rooms = Dict.empty }
+    ( { rooms = Dict.empty
+      , connectedPlayers = Dict.empty
+      }
     , Cmd.none
     )
 

@@ -60,6 +60,7 @@ type Role
 
 type alias BackendModel =
     { rooms : Dict String RoomConstraints
+    , connectedPlayers : Dict ClientId RoomId
     }
 
 
