@@ -101,6 +101,7 @@ type ToBackend
 
 type BackendMsg
     = NoOpBackendMsg
+    | OnDisconnect ClientId
 
 
 type ToFrontend

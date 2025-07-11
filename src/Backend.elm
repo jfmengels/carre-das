@@ -14,7 +14,7 @@ app =
         { init = init
         , update = update
         , updateFromFrontend = updateFromFrontend
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         }
 
 
@@ -32,6 +32,9 @@ update msg model =
     case msg of
         NoOpBackendMsg ->
             ( model, Cmd.none )
+
+        OnDisconnect clientId ->
+            ( { model | connectedPlayers = Dict.remove clientId model.connectedPlayers }, Cmd.none )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
@@ -60,3 +63,8 @@ emptyConstraints =
     , red = ""
     , green = ""
     }
+
+
+subscriptions : Model -> Sub BackendMsg
+subscriptions _ =
+    Lamdera.onDisconnect (\_ clientId -> OnDisconnect clientId)
