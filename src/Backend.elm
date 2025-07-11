@@ -34,7 +34,7 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
-        SetConstraints constraints ->
+        SetConstraints roomId constraints ->
             ( { model | blue = constraints.blue, yellow = constraints.yellow, red = constraints.red, green = constraints.green }
             , SendConstraintsToFrontend constraints
                 |> broadcast

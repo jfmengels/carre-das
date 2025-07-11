@@ -29,13 +29,13 @@ update msg model =
 
         Unveil ->
             ( { model | mode = ShowingAll }
-            , SetConstraints { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
+            , SetConstraints model.roomId { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
                 |> sendToBackend
             )
 
         Veil ->
             ( { model | mode = Editing }
-            , SetConstraints { blue = "", yellow = "", red = "", green = "" }
+            , SetConstraints model.roomId { blue = "", yellow = "", red = "", green = "" }
                 |> sendToBackend
             )
 

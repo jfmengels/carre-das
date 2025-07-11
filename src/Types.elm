@@ -88,7 +88,7 @@ type RoomMsg
 
 
 type ToBackend
-    = SetConstraints { blue : String, yellow : String, red : String, green : String }
+    = SetConstraints RoomId { blue : String, yellow : String, red : String, green : String }
 
 
 type BackendMsg
