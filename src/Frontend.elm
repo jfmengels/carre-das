@@ -259,17 +259,16 @@ viewPlayerConstraint color model =
         [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
         ]
     , bodyWrapper
-        [ Html.div
-            (fullPageBoxAttributes color (Events.onClick (ChangeRole (Player color))))
-            [ viewBoxContent
-                (if text == "" then
+        [ box color
+            { onPress = Just (ChangeRole (Player color))
+            , label =
+                if text == "" then
                     "En attente"
 
-                 else
+                else
                     text
-                )
-                |> Element.layout []
-            ]
+            }
+            |> Element.layout []
         ]
     ]
 
