@@ -187,14 +187,8 @@ viewPlayerConstraint color model =
                 Green ->
                     model.green
     in
-    [ header
-        [ button
-            { onPress = Just (ChangeRole UndecidedUserType)
-            , label = Element.text "Changer de rôle"
-            }
-        ]
-    , box color
-        { onPress = Just (ChangeRole (Player color))
+    [ box color
+        { onPress = Just (ChangeRole UndecidedUserType)
         , label =
             if text == "" then
                 "En attente"
