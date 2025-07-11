@@ -66,7 +66,7 @@ view { input, inputSubmitted } =
             ]
             { onChange = ChangedRoomSelectInput
             , text = input
-            , placeholder = Just (Element.Input.placeholder [] (Element.text "e.g. 1234"))
+            , placeholder = Just (Element.Input.placeholder [] (Element.text "ex: 1234, groupe de potes, ..."))
             , label =
                 Element.Input.labelAbove
                     [ Element.centerX
