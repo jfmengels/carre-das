@@ -330,6 +330,10 @@ viewBox color model =
                     , Element.width Element.fill
                     , Element.centerX
                     , Element.centerY
+                    , Background.color (backgroundColor color)
+                    , Font.color white
+                    , Font.bold
+                    , Font.center
                     ]
                     { onChange = ChangedInput color
                     , text = text
@@ -385,7 +389,7 @@ viewBoxContent text =
         , Element.centerY
         ]
         [ Element.paragraph
-            [ Font.color (Element.rgb 1 1 1)
+            [ Font.color white
             , Font.size 50
             , Font.bold
             , Font.center
@@ -399,6 +403,11 @@ viewBoxContent text =
                 )
             ]
         ]
+
+
+white : Element.Color
+white =
+    Element.rgb 1 1 1
 
 
 backgroundColor : Color -> Element.Color
