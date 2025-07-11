@@ -1,5 +1,6 @@
 module Room exposing (..)
 
+import Color
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
@@ -243,14 +244,14 @@ viewBox color model =
                 [ Element.height Element.fill
                 , Element.width Element.fill
                 , Element.padding 40
-                , Background.color (backgroundColor color)
+                , Background.color (Color.backgroundColor color)
                 ]
                 (Element.Input.text
                     [ Element.height Element.fill
                     , Element.width Element.fill
                     , Element.centerX
                     , Element.centerY
-                    , Background.color (backgroundColor color)
+                    , Background.color (Color.backgroundColor color)
                     , Font.color white
                     , Font.bold
                     , Font.center
@@ -295,7 +296,7 @@ box color { onPress, label } =
         , Element.centerY
         , Element.height Element.fill
         , Element.width Element.fill
-        , Background.color (backgroundColor color)
+        , Background.color (Color.backgroundColor color)
         ]
         { onPress = onPress
         , label = viewBoxContent label
@@ -328,19 +329,3 @@ viewBoxContent text =
 white : Element.Color
 white =
     Element.rgb 1 1 1
-
-
-backgroundColor : Color -> Element.Color
-backgroundColor color =
-    case color of
-        Blue ->
-            Element.rgb 0 0 1
-
-        Yellow ->
-            Element.rgb 1 0.64 0
-
-        Red ->
-            Element.rgb 1 0 0
-
-        Green ->
-            Element.rgb 0 0.5 0
