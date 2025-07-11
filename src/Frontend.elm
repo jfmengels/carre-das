@@ -134,28 +134,32 @@ view model =
             [ Element.height Element.fill
             , Element.width Element.fill
             ]
-            (case model.role of
-                UndecidedUserType ->
-                    viewRoleSelection
-
-                Host ->
-                    [ header
-                        [ button { onPress = Just Edit, label = Element.text "Editer" }
-                        , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
-                        , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-                        , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
-                        , button { onPress = Just Veil, label = Element.text "Cacher" }
-                        , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
-                        ]
-                    , viewHostBoxes model
-                    ]
-
-                Player color ->
-                    viewPlayerConstraint color model
-            )
+            (viewBody model)
             |> Element.layout []
         ]
     }
+
+
+viewBody : Model -> List (Element FrontendMsg)
+viewBody model =
+    case model.role of
+        UndecidedUserType ->
+            viewRoleSelection
+
+        Host ->
+            [ header
+                [ button { onPress = Just Edit, label = Element.text "Editer" }
+                , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
+                , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
+                , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
+                , button { onPress = Just Veil, label = Element.text "Cacher" }
+                , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
+                ]
+            , viewHostBoxes model
+            ]
+
+        Player color ->
+            viewPlayerConstraint color model
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
