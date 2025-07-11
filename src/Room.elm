@@ -13,6 +13,7 @@ init : RoomId -> ( RoomModel, Cmd FrontendMsg )
 init roomId =
     ( { roomId = roomId
       , mode = Showing Nothing
+      , constraintsDisplayed = False
       , role = UndecidedUserType
       , blue = ""
       , yellow = ""
@@ -68,8 +69,8 @@ update msg model =
             ( { model | role = role }, Cmd.none )
 
 
-setConstraints : { blue : String, yellow : String, red : String, green : String } -> RoomModel -> RoomModel
-setConstraints constraints model =
+setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> RoomModel -> RoomModel
+setConstraints constraints constraintsDisplayed model =
     case model.role of
         Host ->
             model
@@ -80,6 +81,7 @@ setConstraints constraints model =
                 , yellow = constraints.yellow
                 , red = constraints.red
                 , green = constraints.green
+                , constraintsDisplayed = constraintsDisplayed
             }
 
 

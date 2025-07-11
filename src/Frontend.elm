@@ -136,10 +136,10 @@ updateFromBackend msg model =
         NoOpToFrontend ->
             ( model, Cmd.none )
 
-        SendConstraintsToFrontend constraints ->
+        SendConstraintsToFrontend constraints constraintsDisplayed ->
             case model.state of
                 InRoom room ->
-                    ( { model | state = InRoom (Room.setConstraints constraints room) }
+                    ( { model | state = InRoom (Room.setConstraints constraints constraintsDisplayed room) }
                     , Cmd.none
                     )
 

@@ -28,6 +28,7 @@ type alias RoomSelectModel =
 type alias RoomModel =
     { roomId : RoomId
     , mode : Mode
+    , constraintsDisplayed : Bool
     , role : Role
     , blue : String
     , yellow : String
@@ -114,4 +115,4 @@ type BackendMsg
 
 type ToFrontend
     = NoOpToFrontend
-    | SendConstraintsToFrontend RoomConstraints
+    | SendConstraintsToFrontend RoomConstraints Bool

@@ -62,7 +62,7 @@ updateFromFrontend sessionId clientId msg model =
                                 { room | connectedPlayers = Set.insert clientId room.connectedPlayers }
                                 model.rooms
                       }
-                    , SendConstraintsToFrontend room.constraints
+                    , SendConstraintsToFrontend room.constraints room.constraintsDisplayed
                         |> sendToFrontend clientId
                     )
 
@@ -85,7 +85,11 @@ updateFromFrontend sessionId clientId msg model =
                     , room.connectedPlayers
                         |> Set.remove clientId
                         |> Set.toList
-                        |> List.map (\connectedPlayerId -> SendConstraintsToFrontend constraints |> sendToFrontend connectedPlayerId)
+                        |> List.map
+                            (\connectedPlayerId ->
+                                SendConstraintsToFrontend constraints room.constraintsDisplayed
+                                    |> sendToFrontend connectedPlayerId
+                            )
                         |> Cmd.batch
                     )
 
