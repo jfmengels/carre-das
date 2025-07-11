@@ -1,5 +1,6 @@
 module Frontend exposing (..)
 
+import AppUrl exposing (AppUrl)
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Element exposing (Element)
@@ -38,10 +39,34 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd msg )
 init url key =
     ( { key = key
-      , state = RoomSelect RoomSelect.init
+      , state =
+            case parseUrl (AppUrl.fromUrl url) of
+                Route_RoomSelect ->
+                    RoomSelect RoomSelect.init
+
+                Route_Room roomId ->
+                    InRoom (Room.init (RoomId roomId))
       }
     , Cmd.none
     )
+
+
+type Route
+    = Route_RoomSelect
+    | Route_Room String
+
+
+parseUrl : AppUrl -> Route
+parseUrl url =
+    case url.path of
+        [] ->
+            Route_RoomSelect
+
+        [ "room", roomId ] ->
+            Route_Room roomId
+
+        _ ->
+            Route_RoomSelect
 
 
 update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
@@ -60,7 +85,7 @@ update msg model =
                     )
 
         UrlChanged url ->
-            ( model, Cmd.none )
+            init url model.key
 
         RoomMsg roomMsg ->
             case model.state of
