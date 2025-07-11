@@ -135,8 +135,12 @@ view model =
     , body =
         case model.role of
             UndecidedUserType ->
-                [ Html.div [ Attr.style "height" "100%" ]
+                [ Element.column
+                    [ Element.height Element.fill
+                    , Element.width Element.fill
+                    ]
                     viewRoleSelection
+                    |> Element.layout []
                 ]
 
             Host ->
@@ -195,27 +199,42 @@ header2 =
         ]
 
 
-viewRoleSelection : List (Html FrontendMsg)
+viewRoleSelection : List (Element FrontendMsg)
 viewRoleSelection =
     [ header2
         [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
         ]
-        |> Element.layout []
-    , bodyWrapper
-        [ viewPlayerSelectButton Blue
-        , viewPlayerSelectButton Yellow
-        , viewPlayerSelectButton Red
-        , viewPlayerSelectButton Green
+    , Element.column
+        [ Element.height Element.fill
+        , Element.width Element.fill
+        , Element.spacing 20
+        ]
+        [ Element.wrappedRow
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , Element.spacing 20
+            ]
+            [ viewPlayerSelectButton Blue
+            , viewPlayerSelectButton Yellow
+            ]
+        , Element.wrappedRow
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , Element.spacing 20
+            ]
+            [ viewPlayerSelectButton Red
+            , viewPlayerSelectButton Green
+            ]
         ]
     ]
 
 
-viewPlayerSelectButton : Color -> Html FrontendMsg
+viewPlayerSelectButton : Color -> Element FrontendMsg
 viewPlayerSelectButton color =
-    Html.div
-        (boxAttributes color (Events.onClick (ChangeRole (Player color))))
-        [ viewBoxContent "Joueur" |> Element.layout []
-        ]
+    box color
+        { onPress = Just (ChangeRole (Player color))
+        , label = "Joueur"
+        }
 
 
 viewPlayerConstraint : Color -> Model -> List (Html FrontendMsg)
