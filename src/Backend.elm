@@ -66,19 +66,29 @@ updateFromFrontend sessionId clientId msg model =
                         |> sendToFrontend clientId
                     )
 
-        SetConstraints roomId constraints ->
+        UnveilConstraints roomId constraints ->
             case SeqDict.get roomId model.rooms of
                 Nothing ->
-                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId constraints) model.rooms }, Cmd.none )
+                    ( { model
+                        | rooms =
+                            SeqDict.insert roomId
+                                { constraints = constraints
+                                , connectedPlayers = Set.singleton clientId
+                                , constraintsDisplayed = True
+                                }
+                                model.rooms
+                      }
+                    , Cmd.none
+                    )
 
                 Just room ->
                     ( { model
                         | rooms =
                             SeqDict.insert
                                 roomId
-                                { room
-                                    | connectedPlayers = Set.insert clientId room.connectedPlayers
-                                    , constraints = constraints
+                                { connectedPlayers = Set.insert clientId room.connectedPlayers
+                                , constraints = constraints
+                                , constraintsDisplayed = True
                                 }
                                 model.rooms
                       }
@@ -87,7 +97,7 @@ updateFromFrontend sessionId clientId msg model =
                         |> Set.toList
                         |> List.map
                             (\connectedPlayerId ->
-                                SendConstraintsToFrontend constraints room.constraintsDisplayed
+                                SendConstraintsToFrontend constraints True
                                     |> sendToFrontend connectedPlayerId
                             )
                         |> Cmd.batch

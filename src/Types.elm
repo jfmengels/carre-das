@@ -105,7 +105,7 @@ type RoomMsg
 
 type ToBackend
     = RegisterToRoom RoomId
-    | SetConstraints RoomId RoomConstraints
+    | UnveilConstraints RoomId RoomConstraints
     | HideConstraints RoomId
 
 

@@ -33,7 +33,7 @@ update msg model =
 
         Unveil ->
             ( { model | mode = ShowingAll }
-            , SetConstraints model.roomId { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
+            , UnveilConstraints model.roomId { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
                 |> sendToBackend
             )
 
