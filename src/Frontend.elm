@@ -133,21 +133,15 @@ view : Model -> Browser.Document FrontendMsg
 view model =
     { title = ""
     , body =
-        case model.role of
-            UndecidedUserType ->
-                [ Element.column
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    ]
+        [ Element.column
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            ]
+            (case model.role of
+                UndecidedUserType ->
                     viewRoleSelection
-                    |> Element.layout []
-                ]
 
-            Host ->
-                [ Element.column
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    ]
+                Host ->
                     [ header
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
                         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
@@ -158,17 +152,12 @@ view model =
                         ]
                     , viewBody model
                     ]
-                    |> Element.layout []
-                ]
 
-            Player color ->
-                [ Element.column
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    ]
-                    (viewPlayerConstraint color model)
-                    |> Element.layout []
-                ]
+                Player color ->
+                    viewPlayerConstraint color model
+            )
+            |> Element.layout []
+        ]
     }
 
 
