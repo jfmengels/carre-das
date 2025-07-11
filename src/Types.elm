@@ -58,8 +58,7 @@ type FrontendMsg
 
 
 type ToBackend
-    = NoOpToBackend
-    | SetConstraints { blue : String, yellow : String, red : String, green : String }
+    = SetConstraints { blue : String, yellow : String, red : String, green : String }
 
 
 type BackendMsg
