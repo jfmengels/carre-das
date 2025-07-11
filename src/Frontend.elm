@@ -147,19 +147,24 @@ viewBody model =
             viewRoleSelection
 
         Host ->
-            [ header
-                [ button { onPress = Just Edit, label = Element.text "Editer" }
-                , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
-                , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-                , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
-                , button { onPress = Just Veil, label = Element.text "Cacher" }
-                , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
-                ]
+            [ viewHostHeaderButtons
             , viewHostBoxes model
             ]
 
         Player color ->
             viewPlayerConstraint color model
+
+
+viewHostHeaderButtons : Element FrontendMsg
+viewHostHeaderButtons =
+    header
+        [ button { onPress = Just Edit, label = Element.text "Editer" }
+        , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
+        , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
+        , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
+        , button { onPress = Just Veil, label = Element.text "Cacher" }
+        , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
+        ]
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
