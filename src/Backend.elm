@@ -1,5 +1,6 @@
 module Backend exposing (..)
 
+import Dict
 import Lamdera exposing (ClientId, SessionId, broadcast, sendToFrontend)
 import Types exposing (..)
 
@@ -19,7 +20,7 @@ app =
 
 init : ( Model, Cmd BackendMsg )
 init =
-    ( { blue = "", yellow = "", red = "", green = "" }
+    ( { rooms = Dict.empty }
     , Cmd.none
     )
 
@@ -34,8 +35,26 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
-        SetConstraints roomId constraints ->
-            ( { model | blue = constraints.blue, yellow = constraints.yellow, red = constraints.red, green = constraints.green }
+        SetConstraints (RoomId roomId) constraints ->
+            ( { model
+                | rooms =
+                    Dict.update roomId
+                        (Maybe.withDefault emptyConstraints
+                            >> (\previous ->
+                                    Just { previous | blue = constraints.blue, yellow = constraints.yellow, red = constraints.red, green = constraints.green }
+                               )
+                        )
+                        model.rooms
+              }
             , SendConstraintsToFrontend constraints
                 |> broadcast
             )
+
+
+emptyConstraints : RoomConstraints
+emptyConstraints =
+    { blue = ""
+    , yellow = ""
+    , red = ""
+    , green = ""
+    }

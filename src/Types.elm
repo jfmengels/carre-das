@@ -2,6 +2,8 @@ module Types exposing (..)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
+import Dict exposing (Dict)
+import Lamdera exposing (ClientId)
 import Url exposing (Url)
 
 
@@ -57,6 +59,11 @@ type Role
 
 
 type alias BackendModel =
+    { rooms : Dict String RoomConstraints
+    }
+
+
+type alias RoomConstraints =
     { blue : String
     , yellow : String
     , red : String
