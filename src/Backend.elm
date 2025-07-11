@@ -93,6 +93,29 @@ updateFromFrontend sessionId clientId msg model =
                         |> Cmd.batch
                     )
 
+        HideConstraints roomId ->
+            case SeqDict.get roomId model.rooms of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just room ->
+                    ( { model
+                        | rooms =
+                            SeqDict.insert
+                                roomId
+                                { room
+                                    | connectedPlayers = Set.insert clientId room.connectedPlayers
+                                    , constraintsDisplayed = False
+                                }
+                                model.rooms
+                      }
+                    , room.connectedPlayers
+                        |> Set.remove clientId
+                        |> Set.toList
+                        |> List.map (\connectedPlayerId -> HideConstraintsForClient |> sendToFrontend connectedPlayerId)
+                        |> Cmd.batch
+                    )
+
 
 emptyRoom : ClientId -> RoomConstraints -> Room
 emptyRoom clientId constraints =

@@ -146,6 +146,16 @@ updateFromBackend msg model =
                 RoomSelect _ ->
                     ( model, Cmd.none )
 
+        HideConstraintsForClient ->
+            case model.state of
+                InRoom room ->
+                    ( { model | state = InRoom (Room.hideConstraints room) }
+                    , Cmd.none
+                    )
+
+                RoomSelect _ ->
+                    ( model, Cmd.none )
+
 
 view : Model -> Browser.Document FrontendMsg
 view model =

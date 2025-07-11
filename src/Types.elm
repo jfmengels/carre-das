@@ -106,6 +106,7 @@ type RoomMsg
 type ToBackend
     = RegisterToRoom RoomId
     | SetConstraints RoomId RoomConstraints
+    | HideConstraints RoomId
 
 
 type BackendMsg
@@ -116,3 +117,4 @@ type BackendMsg
 type ToFrontend
     = NoOpToFrontend
     | SendConstraintsToFrontend RoomConstraints Bool
+    | HideConstraintsForClient

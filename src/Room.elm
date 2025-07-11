@@ -39,7 +39,7 @@ update msg model =
 
         Veil ->
             ( { model | mode = Editing }
-            , SetConstraints model.roomId { blue = "", yellow = "", red = "", green = "" }
+            , HideConstraints model.roomId
                 |> sendToBackend
             )
 
@@ -71,18 +71,18 @@ update msg model =
 
 setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> RoomModel -> RoomModel
 setConstraints constraints constraintsDisplayed model =
-    case model.role of
-        Host ->
-            model
+    { model
+        | blue = constraints.blue
+        , yellow = constraints.yellow
+        , red = constraints.red
+        , green = constraints.green
+        , constraintsDisplayed = constraintsDisplayed
+    }
 
-        _ ->
-            { model
-                | blue = constraints.blue
-                , yellow = constraints.yellow
-                , red = constraints.red
-                , green = constraints.green
-                , constraintsDisplayed = constraintsDisplayed
-            }
+
+hideConstraints : RoomModel -> RoomModel
+hideConstraints model =
+    { model | constraintsDisplayed = False }
 
 
 view : RoomModel -> List (Element RoomMsg)
