@@ -2,6 +2,7 @@ module Backend exposing (..)
 
 import Dict
 import Lamdera exposing (ClientId, SessionId, broadcast, sendToFrontend)
+import Set
 import Types exposing (..)
 
 
@@ -34,7 +35,9 @@ update msg model =
             ( model, Cmd.none )
 
         OnDisconnect clientId ->
-            ( { model | connectedPlayers = Dict.remove clientId model.connectedPlayers }, Cmd.none )
+            ( { model | connectedPlayers = Dict.map (\_ clientIds -> Set.remove clientId clientIds) model.connectedPlayers }
+            , Cmd.none
+            )
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )

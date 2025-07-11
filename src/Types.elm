@@ -4,6 +4,7 @@ import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
 import Dict exposing (Dict)
 import Lamdera exposing (ClientId)
+import Set exposing (Set)
 import Url exposing (Url)
 
 
@@ -60,7 +61,7 @@ type Role
 
 type alias BackendModel =
     { rooms : Dict String RoomConstraints
-    , connectedPlayers : Dict ClientId RoomId
+    , connectedPlayers : Dict String (Set ClientId)
     }
 
 
