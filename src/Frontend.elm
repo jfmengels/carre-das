@@ -162,8 +162,12 @@ view model =
                 ]
 
             Player color ->
-                [ Html.div [ Attr.style "height" "100%" ]
+                [ Element.column
+                    [ Element.height Element.fill
+                    , Element.width Element.fill
+                    ]
                     (viewPlayerConstraint color model)
+                    |> Element.layout []
                 ]
     }
 
@@ -224,7 +228,7 @@ viewPlayerSelectButton color =
         }
 
 
-viewPlayerConstraint : Color -> Model -> List (Html FrontendMsg)
+viewPlayerConstraint : Color -> Model -> List (Element FrontendMsg)
 viewPlayerConstraint color model =
     let
         text : String
@@ -248,19 +252,15 @@ viewPlayerConstraint color model =
             , label = Element.text "Changer de rôle"
             }
         ]
-        |> Element.layout []
-    , bodyWrapper
-        [ box color
-            { onPress = Just (ChangeRole (Player color))
-            , label =
-                if text == "" then
-                    "En attente"
+    , box color
+        { onPress = Just (ChangeRole (Player color))
+        , label =
+            if text == "" then
+                "En attente"
 
-                else
-                    text
-            }
-            |> Element.layout []
-        ]
+            else
+                text
+        }
     ]
 
 
