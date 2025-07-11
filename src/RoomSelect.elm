@@ -1,6 +1,7 @@
 module RoomSelect exposing (..)
 
 import Browser.Navigation
+import Color
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
@@ -47,7 +48,8 @@ view { input, inputSubmitted } =
         , Element.centerY
         , Element.spacing 5
         ]
-        [ if inputSubmitted && String.isEmpty input then
+        [ icon
+        , if inputSubmitted && String.isEmpty input then
             Element.el
                 [ Font.color (Element.rgb 1 0 0)
                 , Element.centerX
@@ -83,6 +85,30 @@ view { input, inputSubmitted } =
             )
         ]
     ]
+
+
+icon : Element msg
+icon =
+    Element.column [ Element.centerX, Element.centerY ]
+        [ Element.wrappedRow []
+            [ viewBox Blue
+            , viewBox Yellow
+            ]
+        , Element.wrappedRow []
+            [ viewBox Red
+            , viewBox Green
+            ]
+        ]
+
+
+viewBox : Color -> Element msg
+viewBox color =
+    Element.el
+        [ Element.height (Element.px 40)
+        , Element.width (Element.px 40)
+        , Background.color (Color.backgroundColor color)
+        ]
+        Element.none
 
 
 onEnter : msg -> Element.Attribute msg
