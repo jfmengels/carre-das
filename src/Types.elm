@@ -97,7 +97,8 @@ type RoomMsg
 
 
 type ToBackend
-    = SetConstraints RoomId { blue : String, yellow : String, red : String, green : String }
+    = RegisterToRoom RoomId
+    | SetConstraints RoomId { blue : String, yellow : String, red : String, green : String }
 
 
 type BackendMsg

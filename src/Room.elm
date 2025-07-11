@@ -9,16 +9,19 @@ import Lamdera exposing (sendToBackend)
 import Types exposing (..)
 
 
-init : RoomId -> RoomModel
+init : RoomId -> ( RoomModel, Cmd FrontendMsg )
 init roomId =
-    { roomId = roomId
-    , mode = Showing Nothing
-    , role = UndecidedUserType
-    , blue = ""
-    , yellow = ""
-    , red = ""
-    , green = ""
-    }
+    ( { roomId = roomId
+      , mode = Showing Nothing
+      , role = UndecidedUserType
+      , blue = ""
+      , yellow = ""
+      , red = ""
+      , green = ""
+      }
+    , RegisterToRoom roomId
+        |> sendToBackend
+    )
 
 
 update : RoomMsg -> RoomModel -> ( RoomModel, Cmd RoomMsg )

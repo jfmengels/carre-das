@@ -43,6 +43,20 @@ update msg model =
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend sessionId clientId msg model =
     case msg of
+        RegisterToRoom (RoomId roomId) ->
+            ( { model
+                | connectedPlayers =
+                    Dict.update
+                        roomId
+                        (Maybe.withDefault Set.empty >> Set.insert clientId >> Just)
+                        model.connectedPlayers
+              }
+            , Dict.get roomId model.rooms
+                |> Maybe.withDefault emptyConstraints
+                |> SendConstraintsToFrontend
+                |> sendToFrontend clientId
+            )
+
         SetConstraints (RoomId roomId) constraints ->
             ( { model
                 | rooms =

@@ -36,7 +36,7 @@ app =
         }
 
 
-init : Url.Url -> Nav.Key -> ( Model, Cmd msg )
+init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     case parseUrl (AppUrl.fromUrl url) of
         Route_RoomSelect ->
@@ -47,10 +47,14 @@ init url key =
             )
 
         Route_Room roomId ->
+            let
+                ( room, cmd ) =
+                    Room.init (RoomId roomId)
+            in
             ( { key = key
-              , state = InRoom (Room.init (RoomId roomId))
+              , state = InRoom room
               }
-            , Cmd.none
+            , cmd
             )
 
 
