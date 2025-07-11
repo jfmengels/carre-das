@@ -404,7 +404,7 @@ backgroundColor color =
             Element.rgb 0 0 1
 
         Yellow ->
-            Element.rgb255 255 165 0
+            Element.rgb 1 0.64 0
 
         Red ->
             Element.rgb 1 0 0
