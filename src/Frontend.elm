@@ -320,13 +320,17 @@ viewBox color model =
     case model.mode of
         Editing ->
             Element.el
-                [ Element.centerX
-                , Element.centerY
-                , Element.height Element.fill
+                [ Element.height Element.fill
                 , Element.width Element.fill
+                , Element.padding 40
                 , Background.color (backgroundColor color)
                 ]
-                (Element.Input.text []
+                (Element.Input.text
+                    [ Element.height Element.fill
+                    , Element.width Element.fill
+                    , Element.centerX
+                    , Element.centerY
+                    ]
                     { onChange = ChangedInput color
                     , text = text
                     , placeholder = Nothing
