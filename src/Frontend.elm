@@ -148,7 +148,7 @@ view model =
                     [ Element.height Element.fill
                     , Element.width Element.fill
                     ]
-                    [ header2
+                    [ header
                         [ button { onPress = Just Edit, label = Element.text "Editer" }
                         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
                         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
@@ -178,21 +178,8 @@ button =
         ]
 
 
-header : List (Html msg) -> Html msg
-header children =
-    Html.div
-        [ Attr.style "height" "100%"
-        , Attr.style "padding" "20px 0 0 20px"
-        , Attr.style "display" "flex"
-        , Attr.style "gap" "20px"
-        , Attr.style "height" "40px"
-        , Attr.style "flex-wrap" "wrap"
-        ]
-        children
-
-
-header2 : List (Element msg) -> Element msg
-header2 =
+header : List (Element msg) -> Element msg
+header =
     Element.wrappedRow
         [ Element.spacing 20
         , Element.padding 20
@@ -201,7 +188,7 @@ header2 =
 
 viewRoleSelection : List (Element FrontendMsg)
 viewRoleSelection =
-    [ header2
+    [ header
         [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
         ]
     , Element.column
@@ -256,8 +243,12 @@ viewPlayerConstraint color model =
                     model.green
     in
     [ header
-        [ Html.button [ Events.onClick (ChangeRole UndecidedUserType), Attr.style "font-size" "20px" ] [ Html.text "Changer de rôle" ]
+        [ button
+            { onPress = Just (ChangeRole UndecidedUserType)
+            , label = Element.text "Changer de rôle"
+            }
         ]
+        |> Element.layout []
     , bodyWrapper
         [ box color
             { onPress = Just (ChangeRole (Player color))
