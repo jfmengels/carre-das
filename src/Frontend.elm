@@ -7,9 +7,6 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input
-import Html exposing (Html)
-import Html.Attributes as Attr
-import Html.Events as Events
 import Lamdera exposing (sendToBackend)
 import Types exposing (..)
 import Url
@@ -279,17 +276,6 @@ viewBody model =
         ]
 
 
-bodyWrapper : List (Html msg) -> Html msg
-bodyWrapper children =
-    Html.div
-        [ Attr.style "display" "flex"
-        , Attr.style "flex-wrap" "wrap"
-        , Attr.style "flex-direction" "row"
-        , Attr.style "min-height" "1000px"
-        ]
-        children
-
-
 viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element FrontendMsg
 viewBox color model =
     let
@@ -315,7 +301,7 @@ viewBox color model =
                 , Element.centerY
                 , Element.height Element.fill
                 , Element.width Element.fill
-                , Background.color (backgroundColor2 color)
+                , Background.color (backgroundColor color)
                 ]
                 (Element.Input.text []
                     { onChange = ChangedInput color
@@ -358,38 +344,11 @@ box color { onPress, label } =
         , Element.centerY
         , Element.height Element.fill
         , Element.width Element.fill
-        , Background.color (backgroundColor2 color)
+        , Background.color (backgroundColor color)
         ]
         { onPress = onPress
         , label = viewBoxContent label
         }
-
-
-fullPageBoxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
-fullPageBoxAttributes color eventHandler =
-    Attr.style "width" "100%"
-        :: Attr.style "flex" "1"
-        :: sharedBoxAttributes color eventHandler
-
-
-boxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
-boxAttributes color eventHandler =
-    Attr.style "flex-basis" "calc(50% - 40px)"
-        :: sharedBoxAttributes color eventHandler
-
-
-sharedBoxAttributes : Color -> Html.Attribute msg -> List (Html.Attribute msg)
-sharedBoxAttributes color eventHandler =
-    [ backgroundColor color
-    , Attr.style "color" "white"
-    , Attr.style "font-size" "50px"
-    , Attr.style "font-weight" "bold"
-    , Attr.style "display" "flex"
-    , Attr.style "justify-content" "center"
-    , Attr.style "flex-direction" "column"
-    , Attr.style "margin" "20px"
-    , eventHandler
-    ]
 
 
 viewBoxContent : String -> Element msg
@@ -415,26 +374,8 @@ viewBoxContent text =
         ]
 
 
-backgroundColor : Color -> Html.Attribute msg
+backgroundColor : Color -> Element.Color
 backgroundColor color =
-    Attr.style "background-color"
-        (case color of
-            Blue ->
-                "blue"
-
-            Yellow ->
-                "orange"
-
-            Red ->
-                "red"
-
-            Green ->
-                "green"
-        )
-
-
-backgroundColor2 : Color -> Element.Color
-backgroundColor2 color =
     case color of
         Blue ->
             Element.rgb 0 0 1
