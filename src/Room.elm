@@ -137,6 +137,7 @@ viewRoleSelection : List (Element RoomMsg)
 viewRoleSelection =
     [ header
         [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
+        , Element.el [ Element.alignRight ] (Element.link [] { url = "/", label = Element.text "Sortir" })
         ]
     , Element.column
         [ Element.height Element.fill
