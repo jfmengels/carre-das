@@ -9,13 +9,22 @@ import Element.Font as Font
 import Element.Input
 import Lamdera exposing (sendToBackend)
 import Types exposing (..)
-import Url
+import Url exposing (Url)
 
 
 type alias Model =
     FrontendModel
 
 
+app :
+    { init : Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
+    , view : Model -> Browser.Document FrontendMsg
+    , update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
+    , subscriptions : Model -> Sub FrontendMsg
+    , onUrlRequest : Browser.UrlRequest -> FrontendMsg
+    , onUrlChange : Url.Url -> FrontendMsg
+    }
 app =
     Lamdera.frontend
         { init = init
