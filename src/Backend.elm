@@ -13,7 +13,7 @@ app =
         { init = init
         , update = update
         , updateFromFrontend = updateFromFrontend
-        , subscriptions = subscriptions
+        , subscriptions = \_ -> Sub.none
         }
 
 
@@ -30,12 +30,6 @@ update msg model =
         NoOpBackendMsg ->
             ( model, Cmd.none )
 
-        ClientConnected clientId ->
-            ( model
-            , SendConstraintsToFrontend model
-                |> sendToFrontend clientId
-            )
-
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
 updateFromFrontend sessionId clientId msg model =
@@ -45,9 +39,3 @@ updateFromFrontend sessionId clientId msg model =
             , SendConstraintsToFrontend constraints
                 |> broadcast
             )
-
-
-subscriptions : Model -> Sub BackendMsg
-subscriptions _ =
-    Lamdera.onConnect
-        (\_ clientId -> ClientConnected clientId)
