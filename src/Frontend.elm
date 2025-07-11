@@ -399,15 +399,19 @@ viewBoxContent text =
 
 backgroundColor : Color -> Element.Color
 backgroundColor color =
-    case color of
-        Blue ->
-            Element.rgb 0 0 1
+    let
+        ( r, g, b ) =
+            case color of
+                Blue ->
+                    ( 0, 0, 1 )
 
-        Yellow ->
-            Element.rgb 1 0.64 0
+                Yellow ->
+                    ( 1, 0.64, 0 )
 
-        Red ->
-            Element.rgb 1 0 0
+                Red ->
+                    ( 1, 0, 0 )
 
-        Green ->
-            Element.rgb 0 0.5 0
+                Green ->
+                    ( 0, 0.5, 0 )
+    in
+    Element.rgb r g b
