@@ -192,11 +192,11 @@ viewPlayerConstraint color model =
     [ box color
         { onPress = Just (ChangeRole UndecidedUserType)
         , label =
-            if text == "" then
-                "En attente"
+            if model.constraintsDisplayed then
+                text
 
             else
-                text
+                "En attente"
         }
     ]
 
