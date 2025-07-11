@@ -22,7 +22,6 @@ app =
 init : ( Model, Cmd BackendMsg )
 init =
     ( { rooms = SeqDict.empty
-      , connectedPlayers = SeqDict.empty
       }
     , Cmd.none
     )
@@ -35,7 +34,14 @@ update msg model =
             ( model, Cmd.none )
 
         OnDisconnect clientId ->
-            ( { model | connectedPlayers = SeqDict.map (\_ clientIds -> Set.remove clientId clientIds) model.connectedPlayers }
+            ( { model
+                | rooms =
+                    SeqDict.map
+                        (\_ room ->
+                            { room | connectedPlayers = Set.remove clientId room.connectedPlayers }
+                        )
+                        model.rooms
+              }
             , Cmd.none
             )
 
@@ -44,33 +50,52 @@ updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd
 updateFromFrontend sessionId clientId msg model =
     case msg of
         RegisterToRoom roomId ->
-            ( { model
-                | connectedPlayers =
-                    SeqDict.update
-                        roomId
-                        (Maybe.withDefault Set.empty >> Set.insert clientId >> Just)
-                        model.connectedPlayers
-              }
-            , SeqDict.get roomId model.rooms
-                |> Maybe.withDefault emptyConstraints
-                |> SendConstraintsToFrontend
-                |> sendToFrontend clientId
-            )
+            case SeqDict.get roomId model.rooms of
+                Nothing ->
+                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId emptyConstraints) model.rooms }, Cmd.none )
+
+                Just room ->
+                    ( { model
+                        | rooms =
+                            SeqDict.insert
+                                roomId
+                                { room | connectedPlayers = Set.insert clientId room.connectedPlayers }
+                                model.rooms
+                      }
+                    , SendConstraintsToFrontend room.constraints
+                        |> sendToFrontend clientId
+                    )
 
         SetConstraints roomId constraints ->
-            ( { model
-                | rooms =
-                    SeqDict.update roomId
-                        (Maybe.withDefault emptyConstraints
-                            >> (\previous ->
-                                    Just { previous | blue = constraints.blue, yellow = constraints.yellow, red = constraints.red, green = constraints.green }
-                               )
-                        )
-                        model.rooms
-              }
-            , SendConstraintsToFrontend constraints
-                |> broadcast
-            )
+            case SeqDict.get roomId model.rooms of
+                Nothing ->
+                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId emptyConstraints) model.rooms }, Cmd.none )
+
+                Just room ->
+                    ( { model
+                        | rooms =
+                            SeqDict.insert
+                                roomId
+                                { room
+                                    | connectedPlayers = Set.insert clientId room.connectedPlayers
+                                    , constraints = constraints
+                                }
+                                model.rooms
+                      }
+                    , room.connectedPlayers
+                        |> Set.remove clientId
+                        |> Set.toList
+                        |> List.map (\connectedPlayerId -> SendConstraintsToFrontend constraints |> sendToFrontend connectedPlayerId)
+                        |> Cmd.batch
+                    )
+
+
+emptyRoom : ClientId -> RoomConstraints -> Room
+emptyRoom clientId constraints =
+    { constraints = constraints
+    , connectedPlayers = Set.singleton clientId
+    , constraintsDisplayed = False
+    }
 
 
 emptyConstraints : RoomConstraints

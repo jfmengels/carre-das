@@ -60,8 +60,14 @@ type Role
 
 
 type alias BackendModel =
-    { rooms : SeqDict RoomId RoomConstraints
-    , connectedPlayers : SeqDict RoomId (Set ClientId)
+    { rooms : SeqDict RoomId Room
+    }
+
+
+type alias Room =
+    { constraints : RoomConstraints
+    , connectedPlayers : Set ClientId
+    , constraintsDisplayed : Bool
     }
 
 
@@ -98,7 +104,7 @@ type RoomMsg
 
 type ToBackend
     = RegisterToRoom RoomId
-    | SetConstraints RoomId { blue : String, yellow : String, red : String, green : String }
+    | SetConstraints RoomId RoomConstraints
 
 
 type BackendMsg
@@ -108,4 +114,4 @@ type BackendMsg
 
 type ToFrontend
     = NoOpToFrontend
-    | SendConstraintsToFrontend { blue : String, yellow : String, red : String, green : String }
+    | SendConstraintsToFrontend RoomConstraints
