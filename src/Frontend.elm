@@ -147,12 +147,17 @@ viewBody model =
             viewRoleSelection
 
         Host ->
-            [ viewHostHeaderButtons
-            , viewHostBoxes model
-            ]
+            viewHost model
 
         Player color ->
             viewPlayerConstraint color model
+
+
+viewHost : Model -> List (Element FrontendMsg)
+viewHost model =
+    [ viewHostHeaderButtons
+    , viewHostBoxes model
+    ]
 
 
 viewHostHeaderButtons : Element FrontendMsg
