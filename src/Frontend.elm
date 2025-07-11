@@ -72,6 +72,10 @@ parseUrl url =
         [ "room", roomId ] ->
             Route_Room roomId
 
+        -- TODO Make host a different Route
+        [ "room", roomId, "host" ] ->
+            Route_Room roomId
+
         _ ->
             Route_RoomSelect
 
