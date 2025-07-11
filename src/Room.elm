@@ -142,12 +142,10 @@ viewRoleSelection =
     , Element.column
         [ Element.height Element.fill
         , Element.width Element.fill
-        , Element.spacing 20
         ]
         [ Element.wrappedRow
             [ Element.height Element.fill
             , Element.width Element.fill
-            , Element.spacing 20
             ]
             [ viewPlayerSelectButton Blue
             , viewPlayerSelectButton Yellow
@@ -155,7 +153,6 @@ viewRoleSelection =
         , Element.wrappedRow
             [ Element.height Element.fill
             , Element.width Element.fill
-            , Element.spacing 20
             ]
             [ viewPlayerSelectButton Red
             , viewPlayerSelectButton Green
@@ -213,12 +210,10 @@ viewHostBoxes model =
     Element.column
         [ Element.height Element.fill
         , Element.width Element.fill
-        , Element.spacing 20
         ]
         [ Element.wrappedRow
             [ Element.height Element.fill
             , Element.width Element.fill
-            , Element.spacing 20
             ]
             [ viewBox Blue model
             , viewBox Yellow model
@@ -226,7 +221,6 @@ viewHostBoxes model =
         , Element.wrappedRow
             [ Element.height Element.fill
             , Element.width Element.fill
-            , Element.spacing 20
             ]
             [ viewBox Red model
             , viewBox Green model
