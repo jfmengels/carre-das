@@ -147,7 +147,7 @@ view model =
                         , button { onPress = Just Veil, label = Element.text "Cacher" }
                         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
                         ]
-                    , viewBody model
+                    , viewHostBoxes model
                     ]
 
                 Player color ->
@@ -250,8 +250,8 @@ viewPlayerConstraint color model =
     ]
 
 
-viewBody : Model -> Element FrontendMsg
-viewBody model =
+viewHostBoxes : Model -> Element FrontendMsg
+viewHostBoxes model =
     Element.column
         [ Element.height Element.fill
         , Element.width Element.fill
