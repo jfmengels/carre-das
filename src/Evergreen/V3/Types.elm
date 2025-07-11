@@ -1,39 +1,16 @@
-module Types exposing (..)
+module Evergreen.V3.Types exposing (..)
 
-import Browser exposing (UrlRequest)
-import Browser.Navigation exposing (Key)
-import Lamdera exposing (ClientId)
-import SeqDict exposing (SeqDict)
-import Set exposing (Set)
-import Url exposing (Url)
-
-
-type alias FrontendModel =
-    { key : Key
-    , state : State
-    }
-
-
-type State
-    = RoomSelect RoomSelectModel
-    | InRoom RoomModel
+import Browser
+import Browser.Navigation
+import Lamdera
+import SeqDict
+import Set
+import Url
 
 
 type alias RoomSelectModel =
     { input : String
     , inputSubmitted : Bool
-    }
-
-
-type alias RoomModel =
-    { roomId : RoomId
-    , mode : Mode
-    , constraintsDisplayed : Bool
-    , role : Role
-    , blue : String
-    , yellow : String
-    , red : String
-    , green : String
     }
 
 
@@ -60,15 +37,26 @@ type Role
     | Player Color
 
 
-type alias BackendModel =
-    { rooms : SeqDict RoomId Room
+type alias RoomModel =
+    { roomId : RoomId
+    , mode : Mode
+    , constraintsDisplayed : Bool
+    , role : Role
+    , blue : String
+    , yellow : String
+    , red : String
+    , green : String
     }
 
 
-type alias Room =
-    { constraints : RoomConstraints
-    , connectedPlayers : Set ClientId
-    , constraintsDisplayed : Bool
+type State
+    = RoomSelect RoomSelectModel
+    | InRoom RoomModel
+
+
+type alias FrontendModel =
+    { key : Browser.Navigation.Key
+    , state : State
     }
 
 
@@ -80,12 +68,16 @@ type alias RoomConstraints =
     }
 
 
-type FrontendMsg
-    = UrlClicked UrlRequest
-    | UrlChanged Url
-    | RoomSelectMsg RoomSelectMsg
-    | RoomMsg RoomMsg
-    | NoOpFrontendMsg
+type alias Room =
+    { constraints : RoomConstraints
+    , connectedPlayers : Set.Set Lamdera.ClientId
+    , constraintsDisplayed : Bool
+    }
+
+
+type alias BackendModel =
+    { rooms : SeqDict.SeqDict RoomId Room
+    }
 
 
 type RoomSelectMsg
@@ -103,6 +95,14 @@ type RoomMsg
     | Veil
 
 
+type FrontendMsg
+    = UrlClicked Browser.UrlRequest
+    | UrlChanged Url.Url
+    | RoomSelectMsg RoomSelectMsg
+    | RoomMsg RoomMsg
+    | NoOpFrontendMsg
+
+
 type ToBackend
     = NoOpToBackend
     | RegisterToRoom RoomId
@@ -112,7 +112,7 @@ type ToBackend
 
 type BackendMsg
     = NoOpBackendMsg
-    | OnDisconnect ClientId
+    | OnDisconnect Lamdera.ClientId
 
 
 type ToFrontend
