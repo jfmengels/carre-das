@@ -3,6 +3,7 @@ module Backend exposing (..)
 import Lamdera exposing (ClientId, SessionId, broadcast, sendToFrontend)
 import SeqDict
 import Set
+import Time
 import Types exposing (..)
 
 
@@ -128,6 +129,14 @@ updateFromFrontend sessionId clientId msg model =
                         |> List.map (\connectedPlayerId -> HideConstraintsForClient |> sendToFrontend connectedPlayerId)
                         |> Cmd.batch
                     )
+
+        RequestRooms ->
+            ( model
+            , model.rooms
+                |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChange = Time.millisToPosix 0 } :: acc) []
+                |> SendRoomsToClient
+                |> sendToFrontend clientId
+            )
 
 
 emptyRoom : ClientId -> RoomConstraints -> Room

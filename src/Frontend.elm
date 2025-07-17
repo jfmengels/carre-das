@@ -187,6 +187,16 @@ updateFromBackend msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        SendRoomsToClient rooms ->
+            case model.state of
+                Admin adminModel ->
+                    ( { model | state = Admin (Admin.gotRooms rooms adminModel) }
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
 
 view : Model -> Browser.Document FrontendMsg
 view model =

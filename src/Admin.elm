@@ -2,6 +2,7 @@ module Admin exposing (..)
 
 import DateFormat.Relative
 import Element exposing (Element)
+import Lamdera exposing (sendToBackend)
 import Task
 import Time
 import Types exposing (..)
@@ -20,7 +21,10 @@ init =
     ( { rooms = []
       , now = Time.millisToPosix 0
       }
-    , Task.perform GotTime Time.now
+    , Cmd.batch
+        [ Task.perform GotTime Time.now
+        , sendToBackend RequestRooms
+        ]
     )
 
 
@@ -29,6 +33,11 @@ update msg model =
     case msg of
         GotTime now ->
             ( { rooms = model.rooms, now = now }, Cmd.none )
+
+
+gotRooms : List RoomForAdmin -> Model -> Model
+gotRooms rooms model =
+    { rooms = rooms, now = model.now }
 
 
 view : Model -> List (Element msg)
