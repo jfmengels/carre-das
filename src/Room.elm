@@ -14,7 +14,11 @@ type alias Model =
     RoomModel
 
 
-init : RoomId -> Role -> ( RoomModel, Cmd FrontendMsg )
+type alias Msg =
+    RoomMsg
+
+
+init : RoomId -> Role -> ( RoomModel, Cmd msg )
 init roomId role =
     ( { roomId = roomId
       , mode = Showing Nothing
@@ -30,7 +34,7 @@ init roomId role =
     )
 
 
-update : RoomMsg -> Model -> ( Model, Cmd RoomMsg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         ShowAll ->
@@ -90,7 +94,7 @@ hideConstraints model =
     { model | constraintsDisplayed = False }
 
 
-view : Model -> List (Element RoomMsg)
+view : Model -> List (Element Msg)
 view model =
     case model.role of
         UndecidedUserType ->
@@ -103,14 +107,14 @@ view model =
             viewPlayerConstraint color model
 
 
-viewHost : Model -> List (Element RoomMsg)
+viewHost : Model -> List (Element Msg)
 viewHost model =
     [ viewHostHeaderButtons
     , viewHostBoxes model
     ]
 
 
-viewHostHeaderButtons : Element RoomMsg
+viewHostHeaderButtons : Element Msg
 viewHostHeaderButtons =
     header
         [ button { onPress = Just Edit, label = Element.text "Editer" }
@@ -140,7 +144,7 @@ header =
         ]
 
 
-viewRoleSelection : List (Element RoomMsg)
+viewRoleSelection : List (Element Msg)
 viewRoleSelection =
     [ header
         [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
@@ -168,7 +172,7 @@ viewRoleSelection =
     ]
 
 
-viewPlayerSelectButton : Color -> Element RoomMsg
+viewPlayerSelectButton : Color -> Element Msg
 viewPlayerSelectButton color =
     box color
         { onPress = Just (ChangeRole (Player color))
@@ -176,7 +180,7 @@ viewPlayerSelectButton color =
         }
 
 
-viewPlayerConstraint : Color -> Model -> List (Element RoomMsg)
+viewPlayerConstraint : Color -> Model -> List (Element Msg)
 viewPlayerConstraint color model =
     [ box color
         { onPress = Just (ChangeRole UndecidedUserType)
@@ -201,7 +205,7 @@ viewPlayerConstraint color model =
     ]
 
 
-viewHostBoxes : Model -> Element RoomMsg
+viewHostBoxes : Model -> Element Msg
 viewHostBoxes model =
     Element.column
         [ Element.height Element.fill
@@ -224,7 +228,7 @@ viewHostBoxes model =
         ]
 
 
-viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element RoomMsg
+viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element Msg
 viewBox color model =
     let
         text : String

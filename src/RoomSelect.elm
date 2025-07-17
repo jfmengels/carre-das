@@ -16,6 +16,10 @@ type alias Model =
     RoomSelectModel
 
 
+type alias Msg =
+    RoomSelectMsg
+
+
 init : Model
 init =
     { input = ""
@@ -23,7 +27,7 @@ init =
     }
 
 
-update : Browser.Navigation.Key -> RoomSelectMsg -> Model -> ( Model, Cmd msg )
+update : Browser.Navigation.Key -> Msg -> Model -> ( Model, Cmd msg )
 update navKey msg model =
     case msg of
         ChangedRoomSelectInput input ->
@@ -45,7 +49,7 @@ update navKey msg model =
                 ( model, Browser.Navigation.pushUrl navKey ("/room/" ++ String.toLower model.input) )
 
 
-view : Model -> List (Element RoomSelectMsg)
+view : Model -> List (Element Msg)
 view { input, inputSubmitted } =
     [ Element.column
         [ Element.centerX
