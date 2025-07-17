@@ -2,6 +2,7 @@ module Frontend exposing (..)
 
 import Admin
 import AppUrl exposing (AppUrl)
+import AudienceRoom
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Element exposing (Element)
@@ -71,6 +72,28 @@ init url key =
                 ]
             )
 
+        Just (Route_AudienceRoom roomId) ->
+            let
+                normalizedRoomId : String
+                normalizedRoomId =
+                    String.toLower roomId
+
+                ( room, cmd ) =
+                    AudienceRoom.init (RoomId normalizedRoomId)
+            in
+            ( { key = key
+              , state = InAudienceRoom room
+              }
+            , Cmd.batch
+                [ cmd
+                , if roomId /= normalizedRoomId then
+                    Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
+
+                  else
+                    Cmd.none
+                ]
+            )
+
         Just (Route_RoomAsHost roomId) ->
             let
                 normalizedRoomId : String
@@ -114,6 +137,7 @@ type Route
     = Route_RoomSelect
     | Route_Room String
     | Route_RoomAsHost String
+    | Route_AudienceRoom String
     | Route_Admin
 
 
@@ -131,6 +155,9 @@ parseUrl url =
 
         [ "room", roomId, "host" ] ->
             Just (Route_RoomAsHost roomId)
+
+        [ "room", roomId, "audience" ] ->
+            Just (Route_AudienceRoom roomId)
 
         _ ->
             Nothing
@@ -227,6 +254,11 @@ updateFromBackend msg model =
                     , Cmd.none
                     )
 
+                InAudienceRoom room ->
+                    ( { model | state = InAudienceRoom (AudienceRoom.setConstraints constraints constraintsDisplayed room) }
+                    , Cmd.none
+                    )
+
                 _ ->
                     ( model, Cmd.none )
 
@@ -234,6 +266,11 @@ updateFromBackend msg model =
             case model.state of
                 InRoom room ->
                     ( { model | state = InRoom (Room.hideConstraints room) }
+                    , Cmd.none
+                    )
+
+                InAudienceRoom room ->
+                    ( { model | state = InAudienceRoom (AudienceRoom.hideConstraints room) }
                     , Cmd.none
                     )
 
@@ -261,6 +298,9 @@ view model =
 
             InRoom room ->
                 column RoomMsg (Room.view room)
+
+            InAudienceRoom room ->
+                column identity (AudienceRoom.view room)
 
             InRoomAsHost room ->
                 column RoomAsHostMsg (RoomAsHost.view room)

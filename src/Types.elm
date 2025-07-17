@@ -19,6 +19,7 @@ type State
     = RoomSelect RoomSelectModel
     | InRoom RoomModel
     | InRoomAsHost RoomAsHostModel
+    | InAudienceRoom AudienceRoomModel
     | Admin AdminModel
     | RouteError
 
@@ -40,6 +41,13 @@ type alias RoomModel =
 type alias RoomAsHostModel =
     { roomId : RoomId
     , mode : Mode
+    , constraintsDisplayed : Bool
+    , constraints : RoomConstraints
+    }
+
+
+type alias AudienceRoomModel =
+    { roomId : RoomId
     , constraintsDisplayed : Bool
     , constraints : RoomConstraints
     }
