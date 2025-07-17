@@ -47,7 +47,7 @@ type alias AdminModel =
 
 type alias RoomForAdmin =
     { id : RoomId
-    , lastChange : Posix
+    , lastChangeDate : Posix
     }
 
 
@@ -83,6 +83,7 @@ type alias Room =
     { constraints : RoomConstraints
     , connectedPlayers : Set ClientId
     , constraintsDisplayed : Bool
+    , lastChangeDate : Posix
     }
 
 

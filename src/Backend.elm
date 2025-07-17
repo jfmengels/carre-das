@@ -73,6 +73,7 @@ updateFromFrontendWithTime now clientId toBackend model =
                                 { constraints = emptyConstraints
                                 , connectedPlayers = Set.singleton clientId
                                 , constraintsDisplayed = False
+                                , lastChangeDate = now
                                 }
                                 model.rooms
                       }
@@ -100,6 +101,7 @@ updateFromFrontendWithTime now clientId toBackend model =
                                 { constraints = constraints
                                 , connectedPlayers = Set.singleton clientId
                                 , constraintsDisplayed = True
+                                , lastChangeDate = now
                                 }
                                 model.rooms
                       }
@@ -114,6 +116,7 @@ updateFromFrontendWithTime now clientId toBackend model =
                                 { connectedPlayers = Set.insert clientId room.connectedPlayers
                                 , constraints = constraints
                                 , constraintsDisplayed = True
+                                , lastChangeDate = now
                                 }
                                 model.rooms
                       }
@@ -154,7 +157,7 @@ updateFromFrontendWithTime now clientId toBackend model =
         RequestRooms ->
             ( model
             , model.rooms
-                |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChange = Time.millisToPosix 0 } :: acc) []
+                |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
                 |> SendRoomsToClient
                 |> sendToFrontend clientId
             )

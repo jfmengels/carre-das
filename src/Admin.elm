@@ -59,7 +59,7 @@ view { rooms, now } =
               , width = Element.fill
               , view =
                     \room ->
-                        DateFormat.Relative.relativeTimeWithOptions DateFormat.Relative.defaultRelativeOptions room.lastChange now
+                        DateFormat.Relative.relativeTimeWithOptions DateFormat.Relative.defaultRelativeOptions room.lastChangeDate now
                             |> Element.text
               }
             ]
