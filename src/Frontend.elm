@@ -1,5 +1,6 @@
 module Frontend exposing (..)
 
+import Admin
 import AppUrl exposing (AppUrl)
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
@@ -58,10 +59,22 @@ init url key =
             , cmd
             )
 
+        Route_Admin ->
+            let
+                ( admin, cmd ) =
+                    Admin.init
+            in
+            ( { key = key
+              , state = Admin admin
+              }
+            , Cmd.map AdminMsg cmd
+            )
+
 
 type Route
     = Route_RoomSelect
     | Route_Room String
+    | Route_Admin
 
 
 parseUrl : AppUrl -> Route
@@ -69,6 +82,9 @@ parseUrl url =
     case url.path of
         [] ->
             Route_RoomSelect
+
+        [ "admin" ] ->
+            Route_Admin
 
         [ "room", roomId ] ->
             Route_Room roomId
@@ -110,7 +126,7 @@ update msg model =
                     , Cmd.map RoomMsg cmd
                     )
 
-                RoomSelect _ ->
+                _ ->
                     ( model, Cmd.none )
 
         RoomSelectMsg roomSelectMsg ->
@@ -124,7 +140,21 @@ update msg model =
                     , cmd
                     )
 
-                InRoom _ ->
+                _ ->
+                    ( model, Cmd.none )
+
+        AdminMsg adminMsg ->
+            case model.state of
+                Admin adminModel ->
+                    let
+                        ( admin, cmd ) =
+                            Admin.update adminMsg adminModel
+                    in
+                    ( { model | state = Admin admin }
+                    , cmd
+                    )
+
+                _ ->
                     ( model, Cmd.none )
 
         NoOpFrontendMsg ->
@@ -144,7 +174,7 @@ updateFromBackend msg model =
                     , Cmd.none
                     )
 
-                RoomSelect _ ->
+                _ ->
                     ( model, Cmd.none )
 
         HideConstraintsForClient ->
@@ -154,7 +184,7 @@ updateFromBackend msg model =
                     , Cmd.none
                     )
 
-                RoomSelect _ ->
+                _ ->
                     ( model, Cmd.none )
 
 
@@ -168,6 +198,9 @@ view model =
 
             RoomSelect roomSelect ->
                 column RoomSelectMsg (RoomSelect.view roomSelect)
+
+            Admin admin ->
+                column AdminMsg (Admin.view admin)
     }
 
 

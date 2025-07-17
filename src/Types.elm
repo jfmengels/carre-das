@@ -5,6 +5,7 @@ import Browser.Navigation exposing (Key)
 import Lamdera exposing (ClientId)
 import SeqDict exposing (SeqDict)
 import Set exposing (Set)
+import Time exposing (Posix)
 import Url exposing (Url)
 
 
@@ -17,6 +18,7 @@ type alias FrontendModel =
 type State
     = RoomSelect RoomSelectModel
     | InRoom RoomModel
+    | Admin AdminModel
 
 
 type alias RoomSelectModel =
@@ -34,6 +36,18 @@ type alias RoomModel =
     , yellow : String
     , red : String
     , green : String
+    }
+
+
+type alias AdminModel =
+    { rooms : List RoomForAdmin
+    , now : Posix
+    }
+
+
+type alias RoomForAdmin =
+    { id : RoomId
+    , lastChange : Posix
     }
 
 
@@ -85,6 +99,7 @@ type FrontendMsg
     | UrlChanged Url
     | RoomSelectMsg RoomSelectMsg
     | RoomMsg RoomMsg
+    | AdminMsg AdminMsg
     | NoOpFrontendMsg
 
 
@@ -101,6 +116,10 @@ type RoomMsg
     | ChangeRole Role
     | Unveil
     | Veil
+
+
+type AdminMsg
+    = GotTime Posix
 
 
 type ToBackend
