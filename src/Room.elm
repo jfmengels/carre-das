@@ -18,11 +18,11 @@ type alias Msg =
     RoomMsg
 
 
-init : RoomId -> Role -> ( Model, Cmd msg )
-init roomId role =
+init : RoomId -> ( Model, Cmd msg )
+init roomId =
     ( { roomId = roomId
       , constraintsDisplayed = False
-      , role = role
+      , color = Nothing
       , blue = ""
       , yellow = ""
       , red = ""
@@ -36,8 +36,8 @@ init roomId role =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ChangeRole role ->
-            ( { model | role = role }, Cmd.none )
+        ChangeColor color ->
+            ( { model | color = color }, Cmd.none )
 
 
 setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> Model -> Model
@@ -58,11 +58,11 @@ hideConstraints model =
 
 view : Model -> List (Element Msg)
 view model =
-    case model.role of
-        UndecidedUserType ->
+    case model.color of
+        Nothing ->
             viewRoleSelection model.roomId
 
-        Player color ->
+        Just color ->
             viewPlayerConstraint color model
 
 
@@ -115,7 +115,7 @@ viewRoleSelection (RoomId roomId) =
 viewPlayerSelectButton : Color -> Element Msg
 viewPlayerSelectButton color =
     box color
-        { onPress = Just (ChangeRole (Player color))
+        { onPress = Just (ChangeColor (Just color))
         , label = "Joueur"
         }
 
@@ -123,7 +123,7 @@ viewPlayerSelectButton color =
 viewPlayerConstraint : Color -> Model -> List (Element Msg)
 viewPlayerConstraint color model =
     [ box color
-        { onPress = Just (ChangeRole UndecidedUserType)
+        { onPress = Just (ChangeColor Nothing)
         , label =
             if model.constraintsDisplayed then
                 case color of

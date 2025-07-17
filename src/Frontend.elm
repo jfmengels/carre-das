@@ -49,14 +49,14 @@ init url key =
             , Cmd.none
             )
 
-        Just (Route_Room roomId role) ->
+        Just (Route_Room roomId) ->
             let
                 normalizedRoomId : String
                 normalizedRoomId =
                     String.toLower roomId
 
                 ( room, cmd ) =
-                    Room.init (RoomId normalizedRoomId) role
+                    Room.init (RoomId normalizedRoomId)
             in
             ( { key = key
               , state = InRoom room
@@ -112,7 +112,7 @@ init url key =
 
 type Route
     = Route_RoomSelect
-    | Route_Room String Role
+    | Route_Room String
     | Route_RoomAsHost String
     | Route_Admin
 
@@ -127,7 +127,7 @@ parseUrl url =
             Just Route_Admin
 
         [ "room", roomId ] ->
-            Just (Route_Room roomId UndecidedUserType)
+            Just (Route_Room roomId)
 
         [ "room", roomId, "host" ] ->
             Just (Route_RoomAsHost roomId)

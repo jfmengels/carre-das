@@ -32,7 +32,7 @@ type alias RoomSelectModel =
 type alias RoomModel =
     { roomId : RoomId
     , constraintsDisplayed : Bool
-    , role : Role
+    , color : Maybe Color
     , blue : String
     , yellow : String
     , red : String
@@ -122,7 +122,7 @@ type RoomSelectMsg
 
 
 type RoomMsg
-    = ChangeRole Role
+    = ChangeColor (Maybe Color)
 
 
 type RoomAsHostMsg
