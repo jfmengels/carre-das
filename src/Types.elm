@@ -121,6 +121,7 @@ type RoomMsg
 
 type AdminMsg
     = GotTime Posix
+    | DeleteRoomClicked RoomId
 
 
 type ToBackend
@@ -129,6 +130,7 @@ type ToBackend
     | UnveilConstraints RoomId RoomConstraints
     | HideConstraints RoomId
     | RequestRooms
+    | DeleteRoom RoomId
 
 
 type BackendMsg

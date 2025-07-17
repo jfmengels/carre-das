@@ -162,6 +162,11 @@ updateFromFrontendWithTime now clientId toBackend model =
                 |> sendToFrontend clientId
             )
 
+        DeleteRoom roomId ->
+            ( { model | rooms = SeqDict.remove roomId model.rooms }
+            , Cmd.none
+            )
+
 
 emptyConstraints : RoomConstraints
 emptyConstraints =
