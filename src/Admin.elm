@@ -6,6 +6,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Input
 import Lamdera exposing (sendToBackend)
+import Route
 import Task
 import Time
 import Types exposing (..)
@@ -63,7 +64,7 @@ view { rooms, now } =
                         >> unwrapRoomId
                         >> (\roomId ->
                                 Element.link []
-                                    { url = "/room/" ++ roomId
+                                    { url = Route.toUrl (Route.Route_Room roomId)
                                     , label =
                                         Element.text roomId
                                     }

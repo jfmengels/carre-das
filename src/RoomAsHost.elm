@@ -8,6 +8,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input
 import Lamdera exposing (sendToBackend)
+import Route
 import Types exposing (..)
 
 
@@ -88,8 +89,8 @@ view model =
 viewHostHeaderButtons : RoomId -> Element Msg
 viewHostHeaderButtons (RoomId roomId) =
     header
-        [ Element.link [] { url = "/room/" ++ roomId, label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
-        , button { onPress = Nothing, label = Element.el [ Element.alignRight ] (Element.link [] { url = "/", label = Element.text "Sortir" }) }
+        [ Element.link [] { url = Route.toUrl (Route.Route_Room roomId), label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
+        , button { onPress = Nothing, label = Element.el [ Element.alignRight ] (Element.link [] { url = Route.toUrl Route.Route_RoomSelect, label = Element.text "Sortir" }) }
         , button { onPress = Just Edit, label = Element.text "Editer" }
         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }

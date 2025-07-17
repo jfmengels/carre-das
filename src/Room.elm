@@ -8,6 +8,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input
 import Lamdera exposing (sendToBackend)
+import Route
 import Types exposing (..)
 
 
@@ -82,8 +83,8 @@ header =
 viewRoleSelection : RoomId -> List (Element Msg)
 viewRoleSelection (RoomId roomId) =
     [ header
-        [ Element.link [] { url = "/room/" ++ roomId ++ "/host", label = button { onPress = Nothing, label = Element.text "Je suis hôte 🪄" } }
-        , Element.el [ Element.alignRight ] (Element.link [] { url = "/", label = Element.text "Sortir" })
+        [ Element.link [] { url = Route.toUrl (Route.Route_RoomAsHost roomId), label = button { onPress = Nothing, label = Element.text "Je suis hôte 🪄" } }
+        , Element.el [ Element.alignRight ] (Element.link [] { url = Route.toUrl Route.Route_RoomSelect, label = Element.text "Sortir" })
         ]
     , Element.column
         [ Element.height Element.fill

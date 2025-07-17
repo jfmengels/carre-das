@@ -44,93 +44,75 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     case Route.parseUrl (AppUrl.fromUrl url) of
-        Just Route_RoomSelect ->
-            ( { key = key
-              , state = RoomSelect RoomSelect.init
-              }
-            , Cmd.none
-            )
-
-        Just (Route_Room roomId) ->
+        Just ( route, needsUrlReplacing ) ->
             let
-                normalizedRoomId : String
-                normalizedRoomId =
-                    String.toLower roomId
-
-                ( room, cmd ) =
-                    Room.init (RoomId normalizedRoomId)
+                ( state, cmd ) =
+                    initFromRoute key route
             in
             ( { key = key
-              , state = InRoom room
+              , state = state
               }
             , Cmd.batch
                 [ cmd
-                , if roomId /= normalizedRoomId then
-                    Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
+                , if needsUrlReplacing then
+                    Nav.replaceUrl key (Route.toUrl route)
 
                   else
                     Cmd.none
                 ]
-            )
-
-        Just (Route_AudienceRoom roomId) ->
-            let
-                normalizedRoomId : String
-                normalizedRoomId =
-                    String.toLower roomId
-
-                ( room, cmd ) =
-                    AudienceRoom.init (RoomId normalizedRoomId)
-            in
-            ( { key = key
-              , state = InAudienceRoom room
-              }
-            , Cmd.batch
-                [ cmd
-                , if roomId /= normalizedRoomId then
-                    Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
-
-                  else
-                    Cmd.none
-                ]
-            )
-
-        Just (Route_RoomAsHost roomId) ->
-            let
-                normalizedRoomId : String
-                normalizedRoomId =
-                    String.toLower roomId
-
-                room : RoomAsHost.Model
-                room =
-                    RoomAsHost.init (RoomId normalizedRoomId)
-            in
-            ( { key = key
-              , state = InRoomAsHost room
-              }
-            , if roomId /= normalizedRoomId then
-                Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
-
-              else
-                Cmd.none
-            )
-
-        Just Route_Admin ->
-            let
-                ( admin, cmd ) =
-                    Admin.init
-            in
-            ( { key = key
-              , state = Admin admin
-              }
-            , Cmd.map AdminMsg cmd
             )
 
         Nothing ->
             ( { key = key
               , state = RouteError
               }
-            , Nav.replaceUrl key "/"
+            , Nav.replaceUrl key (Route.toUrl Route.Route_RoomSelect)
+            )
+
+
+initFromRoute : Nav.Key -> Route -> ( State, Cmd FrontendMsg )
+initFromRoute key route =
+    case route of
+        Route_RoomSelect ->
+            ( RoomSelect RoomSelect.init
+            , Cmd.none
+            )
+
+        Route_Room roomId ->
+            let
+                ( room, cmd ) =
+                    Room.init (RoomId roomId)
+            in
+            ( InRoom room
+            , cmd
+            )
+
+        Route_AudienceRoom roomId ->
+            let
+                ( room, cmd ) =
+                    AudienceRoom.init (RoomId roomId)
+            in
+            ( InAudienceRoom room
+            , cmd
+            )
+
+        Route_RoomAsHost roomId ->
+            let
+                room : RoomAsHost.Model
+                room =
+                    RoomAsHost.init (RoomId roomId)
+            in
+            ( InRoomAsHost room
+            , Cmd.none
+            )
+
+        Route_Admin ->
+            let
+                ( admin, cmd ) =
+                    Admin.init
+            in
+            ( Admin admin
+            , Cmd.map AdminMsg cmd
             )
 
 

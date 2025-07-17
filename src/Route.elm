@@ -11,23 +11,52 @@ type Route
     | Route_Admin
 
 
-parseUrl : AppUrl -> Maybe Route
+parseUrl : AppUrl -> Maybe ( Route, Bool )
 parseUrl url =
     case url.path of
         [] ->
-            Just Route_RoomSelect
+            Just ( Route_RoomSelect, False )
 
         [ "admin" ] ->
-            Just Route_Admin
+            Just ( Route_Admin, False )
 
         [ "room", roomId ] ->
-            Just (Route_Room roomId)
+            lowerCaseRoomId Route_Room roomId
 
         [ "room", roomId, "host" ] ->
-            Just (Route_RoomAsHost roomId)
+            lowerCaseRoomId Route_RoomAsHost roomId
 
         [ "room", roomId, "audience" ] ->
-            Just (Route_AudienceRoom roomId)
+            lowerCaseRoomId Route_AudienceRoom roomId
 
         _ ->
             Nothing
+
+
+toUrl : Route -> String
+toUrl route =
+    case route of
+        Route_RoomSelect ->
+            "/"
+
+        Route_Room roomId ->
+            "/room/" ++ roomId
+
+        Route_RoomAsHost roomId ->
+            "/room/" ++ roomId ++ "/host"
+
+        Route_AudienceRoom roomId ->
+            "/room/" ++ roomId ++ "/audience"
+
+        Route_Admin ->
+            "/admin"
+
+
+lowerCaseRoomId : (String -> Route) -> String -> Maybe ( Route, Bool )
+lowerCaseRoomId toRoute roomId =
+    let
+        lowerCased : String
+        lowerCased =
+            String.toLower roomId
+    in
+    Just ( toRoute lowerCased, roomId /= lowerCased )
