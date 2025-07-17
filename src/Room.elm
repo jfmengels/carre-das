@@ -10,6 +10,10 @@ import Lamdera exposing (sendToBackend)
 import Types exposing (..)
 
 
+type alias Model =
+    RoomModel
+
+
 init : RoomId -> ( RoomModel, Cmd FrontendMsg )
 init roomId =
     ( { roomId = roomId
@@ -26,7 +30,7 @@ init roomId =
     )
 
 
-update : RoomMsg -> RoomModel -> ( RoomModel, Cmd RoomMsg )
+update : RoomMsg -> Model -> ( Model, Cmd RoomMsg )
 update msg model =
     case msg of
         ShowAll ->
@@ -70,7 +74,7 @@ update msg model =
             ( { model | role = role }, Cmd.none )
 
 
-setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> RoomModel -> RoomModel
+setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> Model -> Model
 setConstraints constraints constraintsDisplayed model =
     { model
         | blue = constraints.blue
@@ -81,12 +85,12 @@ setConstraints constraints constraintsDisplayed model =
     }
 
 
-hideConstraints : RoomModel -> RoomModel
+hideConstraints : Model -> Model
 hideConstraints model =
     { model | constraintsDisplayed = False }
 
 
-view : RoomModel -> List (Element RoomMsg)
+view : Model -> List (Element RoomMsg)
 view model =
     case model.role of
         UndecidedUserType ->
@@ -99,7 +103,7 @@ view model =
             viewPlayerConstraint color model
 
 
-viewHost : RoomModel -> List (Element RoomMsg)
+viewHost : Model -> List (Element RoomMsg)
 viewHost model =
     [ viewHostHeaderButtons
     , viewHostBoxes model
@@ -172,7 +176,7 @@ viewPlayerSelectButton color =
         }
 
 
-viewPlayerConstraint : Color -> RoomModel -> List (Element RoomMsg)
+viewPlayerConstraint : Color -> Model -> List (Element RoomMsg)
 viewPlayerConstraint color model =
     [ box color
         { onPress = Just (ChangeRole UndecidedUserType)
@@ -197,7 +201,7 @@ viewPlayerConstraint color model =
     ]
 
 
-viewHostBoxes : RoomModel -> Element RoomMsg
+viewHostBoxes : Model -> Element RoomMsg
 viewHostBoxes model =
     Element.column
         [ Element.height Element.fill

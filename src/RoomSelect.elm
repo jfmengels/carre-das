@@ -12,14 +12,18 @@ import Json.Decode as Decode
 import Types exposing (..)
 
 
-init : RoomSelectModel
+type alias Model =
+    RoomSelectModel
+
+
+init : Model
 init =
     { input = ""
     , inputSubmitted = False
     }
 
 
-update : Browser.Navigation.Key -> RoomSelectMsg -> RoomSelectModel -> ( RoomSelectModel, Cmd msg )
+update : Browser.Navigation.Key -> RoomSelectMsg -> Model -> ( Model, Cmd msg )
 update navKey msg model =
     case msg of
         ChangedRoomSelectInput input ->
@@ -41,7 +45,7 @@ update navKey msg model =
                 ( model, Browser.Navigation.pushUrl navKey ("/room/" ++ model.input) )
 
 
-view : RoomSelectModel -> List (Element RoomSelectMsg)
+view : Model -> List (Element RoomSelectMsg)
 view { input, inputSubmitted } =
     [ Element.column
         [ Element.centerX
