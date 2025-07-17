@@ -96,6 +96,7 @@ viewHostHeaderButtons (RoomId roomId) =
         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
         , button { onPress = Just Veil, label = Element.text "Cacher" }
         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
+        , Element.link [] { url = Route.toUrl (Route.Route_AudienceRoom roomId), label = button { onPress = Nothing, label = Element.text "Vers public" } }
         ]
 
 
