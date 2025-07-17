@@ -55,7 +55,7 @@ init url key =
                     String.toLower roomId
 
                 ( room, cmd ) =
-                    Room.init (RoomId normalizedRoomId)
+                    Room.init (RoomId normalizedRoomId) UndecidedUserType
             in
             ( { key = key
               , state = InRoom room

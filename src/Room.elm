@@ -14,12 +14,12 @@ type alias Model =
     RoomModel
 
 
-init : RoomId -> ( RoomModel, Cmd FrontendMsg )
-init roomId =
+init : RoomId -> Role -> ( RoomModel, Cmd FrontendMsg )
+init roomId role =
     ( { roomId = roomId
       , mode = Showing Nothing
       , constraintsDisplayed = False
-      , role = UndecidedUserType
+      , role = role
       , blue = ""
       , yellow = ""
       , red = ""
