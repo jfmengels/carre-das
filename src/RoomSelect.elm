@@ -71,6 +71,7 @@ view { input, inputSubmitted } =
             [ Element.height Element.fill
             , Element.width Element.fill
             , onEnter Submit
+            , Element.Input.focusedOnLoad
             ]
             { onChange = ChangedRoomSelectInput
             , text = input
