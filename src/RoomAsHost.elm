@@ -97,10 +97,11 @@ view model =
 viewHostHeaderButtons : RoomId -> Element Msg
 viewHostHeaderButtons (RoomId roomId) =
     header
-        [ button { onPress = Just Edit, label = Element.text "Editer" }
+        [ Element.link [] { url = "/room/" ++ roomId, label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
+        , button { onPress = Nothing, label = Element.el [ Element.alignRight ] (Element.link [] { url = "/", label = Element.text "Sortir" }) }
+        , button { onPress = Just Edit, label = Element.text "Editer" }
         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-        , Element.link [] { url = "/room/" ++ roomId, label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
         , button { onPress = Just Veil, label = Element.text "Cacher" }
         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
         ]
