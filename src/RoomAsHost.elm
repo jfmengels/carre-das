@@ -1,6 +1,7 @@
 module RoomAsHost exposing (..)
 
 import Color
+import Constraints
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
@@ -23,10 +24,7 @@ init roomId =
     { roomId = roomId
     , mode = Showing Nothing
     , constraintsDisplayed = False
-    , blue = ""
-    , yellow = ""
-    , red = ""
-    , green = ""
+    , constraints = Constraints.empty
     }
 
 
@@ -38,7 +36,7 @@ update msg model =
 
         Unveil ->
             ( { model | mode = ShowingAll }
-            , UnveilConstraints model.roomId { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
+            , UnveilConstraints model.roomId model.constraints
                 |> sendToBackend
             )
 
@@ -52,39 +50,32 @@ update msg model =
             ( { model | mode = Editing }, Cmd.none )
 
         ChangedInput color text ->
-            ( case color of
-                Blue ->
-                    { model | blue = text }
+            let
+                constraints : RoomConstraints
+                constraints =
+                    model.constraints
 
-                Yellow ->
-                    { model | yellow = text }
+                newConstraints : RoomConstraints
+                newConstraints =
+                    case color of
+                        Blue ->
+                            { constraints | blue = text }
 
-                Red ->
-                    { model | red = text }
+                        Yellow ->
+                            { constraints | yellow = text }
 
-                Green ->
-                    { model | green = text }
+                        Red ->
+                            { constraints | red = text }
+
+                        Green ->
+                            { constraints | green = text }
+            in
+            ( { model | constraints = newConstraints }
             , Cmd.none
             )
 
         Show maybeColor ->
             ( { model | mode = Showing maybeColor }, Cmd.none )
-
-
-setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> Model -> Model
-setConstraints constraints constraintsDisplayed model =
-    { model
-        | blue = constraints.blue
-        , yellow = constraints.yellow
-        , red = constraints.red
-        , green = constraints.green
-        , constraintsDisplayed = constraintsDisplayed
-    }
-
-
-hideConstraints : Model -> Model
-hideConstraints model =
-    { model | constraintsDisplayed = False }
 
 
 view : Model -> List (Element Msg)
@@ -135,38 +126,38 @@ viewHostBoxes model =
             [ Element.height Element.fill
             , Element.width Element.fill
             ]
-            [ viewBox Blue model
-            , viewBox Yellow model
+            [ viewBox Blue model.mode model.constraints
+            , viewBox Yellow model.mode model.constraints
             ]
         , Element.wrappedRow
             [ Element.height Element.fill
             , Element.width Element.fill
             ]
-            [ viewBox Red model
-            , viewBox Green model
+            [ viewBox Red model.mode model.constraints
+            , viewBox Green model.mode model.constraints
             ]
         ]
 
 
-viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element Msg
-viewBox color model =
+viewBox : Color -> Mode -> RoomConstraints -> Element Msg
+viewBox color mode constraints =
     let
         text : String
         text =
             case color of
                 Blue ->
-                    model.blue
+                    constraints.blue
 
                 Yellow ->
-                    model.yellow
+                    constraints.yellow
 
                 Red ->
-                    model.red
+                    constraints.red
 
                 Green ->
-                    model.green
+                    constraints.green
     in
-    case model.mode of
+    case mode of
         Editing ->
             Element.el
                 [ Element.height Element.fill

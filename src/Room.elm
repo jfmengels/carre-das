@@ -1,6 +1,7 @@
 module Room exposing (..)
 
 import Color
+import Constraints
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
@@ -23,10 +24,7 @@ init roomId =
     ( { roomId = roomId
       , constraintsDisplayed = False
       , color = Nothing
-      , blue = ""
-      , yellow = ""
-      , red = ""
-      , green = ""
+      , constraints = Constraints.empty
       }
     , RegisterToRoom roomId
         |> sendToBackend
@@ -40,13 +38,10 @@ update msg model =
             ( { model | color = color }, Cmd.none )
 
 
-setConstraints : { blue : String, yellow : String, red : String, green : String } -> Bool -> Model -> Model
+setConstraints : RoomConstraints -> Bool -> Model -> Model
 setConstraints constraints constraintsDisplayed model =
     { model
-        | blue = constraints.blue
-        , yellow = constraints.yellow
-        , red = constraints.red
-        , green = constraints.green
+        | constraints = constraints
         , constraintsDisplayed = constraintsDisplayed
     }
 
@@ -128,16 +123,16 @@ viewPlayerConstraint color model =
             if model.constraintsDisplayed then
                 case color of
                     Blue ->
-                        model.blue
+                        model.constraints.blue
 
                     Yellow ->
-                        model.yellow
+                        model.constraints.yellow
 
                     Red ->
-                        model.red
+                        model.constraints.red
 
                     Green ->
-                        model.green
+                        model.constraints.green
 
             else
                 "En attente"

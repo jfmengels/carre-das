@@ -33,10 +33,7 @@ type alias RoomModel =
     { roomId : RoomId
     , constraintsDisplayed : Bool
     , color : Maybe Color
-    , blue : String
-    , yellow : String
-    , red : String
-    , green : String
+    , constraints : RoomConstraints
     }
 
 
@@ -44,10 +41,7 @@ type alias RoomAsHostModel =
     { roomId : RoomId
     , mode : Mode
     , constraintsDisplayed : Bool
-    , blue : String
-    , yellow : String
-    , red : String
-    , green : String
+    , constraints : RoomConstraints
     }
 
 
