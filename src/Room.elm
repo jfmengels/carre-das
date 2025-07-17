@@ -98,7 +98,7 @@ view : Model -> List (Element Msg)
 view model =
     case model.role of
         UndecidedUserType ->
-            viewRoleSelection
+            viewRoleSelection model.roomId
 
         Host ->
             viewHost model
@@ -109,18 +109,18 @@ view model =
 
 viewHost : Model -> List (Element Msg)
 viewHost model =
-    [ viewHostHeaderButtons
+    [ viewHostHeaderButtons model.roomId
     , viewHostBoxes model
     ]
 
 
-viewHostHeaderButtons : Element Msg
-viewHostHeaderButtons =
+viewHostHeaderButtons : RoomId -> Element Msg
+viewHostHeaderButtons (RoomId roomId) =
     header
         [ button { onPress = Just Edit, label = Element.text "Editer" }
         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-        , button { onPress = Just (ChangeRole UndecidedUserType), label = Element.text "Changer de rôle" }
+        , Element.link [] { url = "/room/" ++ roomId, label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
         , button { onPress = Just Veil, label = Element.text "Cacher" }
         , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
         ]
@@ -144,10 +144,10 @@ header =
         ]
 
 
-viewRoleSelection : List (Element Msg)
-viewRoleSelection =
+viewRoleSelection : RoomId -> List (Element Msg)
+viewRoleSelection (RoomId roomId) =
     [ header
-        [ button { onPress = Just (ChangeRole Host), label = Element.text "Je suis hôte 🪄" }
+        [ Element.link [] { url = "/room/" ++ roomId ++ "/host", label = button { onPress = Nothing, label = Element.text "Je suis hôte 🪄" } }
         , Element.el [ Element.alignRight ] (Element.link [] { url = "/", label = Element.text "Sortir" })
         ]
     , Element.column
