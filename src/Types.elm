@@ -74,11 +74,6 @@ type Mode
     | Showing (Maybe Color)
 
 
-type Role
-    = UndecidedUserType
-    | Player Color
-
-
 type alias BackendModel =
     { rooms : SeqDict RoomId Room
     }
