@@ -59,12 +59,15 @@ view { rooms, now } =
             [ { header = Element.text "ID"
               , width = Element.fill
               , view =
-                    \room ->
-                        let
-                            (RoomId roomId) =
-                                room.id
-                        in
-                        Element.text roomId
+                    .id
+                        >> unwrapRoomId
+                        >> (\roomId ->
+                                Element.link []
+                                    { url = "/room/" ++ roomId
+                                    , label =
+                                        Element.text roomId
+                                    }
+                           )
               }
             , { header = Element.text "Last activity"
               , width = Element.fill
@@ -80,6 +83,11 @@ view { rooms, now } =
             ]
         }
     ]
+
+
+unwrapRoomId : RoomId -> String
+unwrapRoomId (RoomId roomId) =
+    roomId
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
