@@ -41,14 +41,14 @@ app =
 init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
 init url key =
     case parseUrl (AppUrl.fromUrl url) of
-        Route_RoomSelect ->
+        Just Route_RoomSelect ->
             ( { key = key
               , state = RoomSelect RoomSelect.init
               }
             , Cmd.none
             )
 
-        Route_Room roomId ->
+        Just (Route_Room roomId) ->
             let
                 normalizedRoomId : String
                 normalizedRoomId =
@@ -70,7 +70,7 @@ init url key =
                 ]
             )
 
-        Route_Admin ->
+        Just Route_Admin ->
             let
                 ( admin, cmd ) =
                     Admin.init
@@ -81,6 +81,13 @@ init url key =
             , Cmd.map AdminMsg cmd
             )
 
+        Nothing ->
+            ( { key = key
+              , state = RouteError
+              }
+            , Nav.replaceUrl key "/"
+            )
+
 
 type Route
     = Route_RoomSelect
@@ -88,24 +95,24 @@ type Route
     | Route_Admin
 
 
-parseUrl : AppUrl -> Route
+parseUrl : AppUrl -> Maybe Route
 parseUrl url =
     case url.path of
         [] ->
-            Route_RoomSelect
+            Just Route_RoomSelect
 
         [ "admin" ] ->
-            Route_Admin
+            Just Route_Admin
 
         [ "room", roomId ] ->
-            Route_Room roomId
+            Just (Route_Room roomId)
 
         -- TODO Make host a different Route
         [ "room", roomId, "host" ] ->
-            Route_Room roomId
+            Just (Route_Room roomId)
 
         _ ->
-            Route_RoomSelect
+            Nothing
 
 
 update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
@@ -222,6 +229,9 @@ view model =
 
             Admin admin ->
                 column AdminMsg (Admin.view admin)
+
+            RouteError ->
+                []
     }
 
 

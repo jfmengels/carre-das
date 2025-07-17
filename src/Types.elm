@@ -19,6 +19,7 @@ type State
     = RoomSelect RoomSelectModel
     | InRoom RoomModel
     | Admin AdminModel
+    | RouteError
 
 
 type alias RoomSelectModel =
