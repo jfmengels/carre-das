@@ -42,7 +42,7 @@ update navKey msg model =
                 )
 
             else
-                ( model, Browser.Navigation.pushUrl navKey ("/room/" ++ model.input) )
+                ( model, Browser.Navigation.pushUrl navKey ("/room/" ++ String.toLower model.input) )
 
 
 view : Model -> List (Element RoomSelectMsg)

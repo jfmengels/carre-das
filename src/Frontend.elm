@@ -50,13 +50,24 @@ init url key =
 
         Route_Room roomId ->
             let
+                normalizedRoomId : String
+                normalizedRoomId =
+                    String.toLower roomId
+
                 ( room, cmd ) =
-                    Room.init (RoomId roomId)
+                    Room.init (RoomId normalizedRoomId)
             in
             ( { key = key
               , state = InRoom room
               }
-            , cmd
+            , Cmd.batch
+                [ cmd
+                , if roomId /= normalizedRoomId then
+                    Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
+
+                  else
+                    Cmd.none
+                ]
             )
 
         Route_Admin ->
