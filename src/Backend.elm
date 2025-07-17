@@ -1,9 +1,10 @@
 module Backend exposing (..)
 
-import Lamdera exposing (ClientId, SessionId, broadcast, sendToFrontend)
+import Lamdera exposing (ClientId, SessionId, sendToFrontend)
 import SeqDict
 import Set
-import Time
+import Task
+import Time exposing (Posix)
 import Types exposing (..)
 
 
@@ -46,10 +47,20 @@ update msg model =
             , Cmd.none
             )
 
+        BackendGotTime clientId toBackend time ->
+            updateFromFrontendWithTime time clientId toBackend model
+
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
-updateFromFrontend sessionId clientId msg model =
-    case msg of
+updateFromFrontend sessionId clientId toBackend model =
+    ( model
+    , Task.perform (BackendGotTime clientId toBackend) Time.now
+    )
+
+
+updateFromFrontendWithTime : Posix -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
+updateFromFrontendWithTime now clientId toBackend model =
+    case toBackend of
         NoOpToBackend ->
             ( model, Cmd.none )
 
