@@ -4,6 +4,7 @@ import AppUrl exposing (AppUrl)
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
 import Element exposing (Element)
+import Html exposing (Html)
 import Lamdera
 import Room
 import RoomSelect
@@ -163,22 +164,20 @@ view model =
     , body =
         case model.state of
             InRoom room ->
-                [ Element.column
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    ]
-                    (Room.view room)
-                    |> Element.map RoomMsg
-                    |> Element.layout []
-                ]
+                column RoomMsg (Room.view room)
 
             RoomSelect roomSelect ->
-                [ Element.column
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    ]
-                    (RoomSelect.view roomSelect)
-                    |> Element.map RoomSelectMsg
-                    |> Element.layout []
-                ]
+                column RoomSelectMsg (RoomSelect.view roomSelect)
     }
+
+
+column : (msg -> a) -> List (Element msg) -> List (Html a)
+column mapper body =
+    [ Element.column
+        [ Element.height Element.fill
+        , Element.width Element.fill
+        ]
+        body
+        |> Element.map mapper
+        |> Element.layout []
+    ]
