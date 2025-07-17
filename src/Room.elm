@@ -21,7 +21,6 @@ type alias Msg =
 init : RoomId -> Role -> ( Model, Cmd msg )
 init roomId role =
     ( { roomId = roomId
-      , mode = Showing Nothing
       , constraintsDisplayed = False
       , role = role
       , blue = ""
@@ -37,43 +36,6 @@ init roomId role =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ShowAll ->
-            ( { model | mode = ShowingAll }, Cmd.none )
-
-        Unveil ->
-            ( { model | mode = ShowingAll }
-            , UnveilConstraints model.roomId { blue = model.blue, yellow = model.yellow, red = model.red, green = model.green }
-                |> sendToBackend
-            )
-
-        Veil ->
-            ( { model | mode = Editing }
-            , HideConstraints model.roomId
-                |> sendToBackend
-            )
-
-        Edit ->
-            ( { model | mode = Editing }, Cmd.none )
-
-        ChangedInput color text ->
-            ( case color of
-                Blue ->
-                    { model | blue = text }
-
-                Yellow ->
-                    { model | yellow = text }
-
-                Red ->
-                    { model | red = text }
-
-                Green ->
-                    { model | green = text }
-            , Cmd.none
-            )
-
-        Show maybeColor ->
-            ( { model | mode = Showing maybeColor }, Cmd.none )
-
         ChangeRole role ->
             ( { model | role = role }, Cmd.none )
 
@@ -100,30 +62,8 @@ view model =
         UndecidedUserType ->
             viewRoleSelection model.roomId
 
-        Host ->
-            viewHost model
-
         Player color ->
             viewPlayerConstraint color model
-
-
-viewHost : Model -> List (Element Msg)
-viewHost model =
-    [ viewHostHeaderButtons model.roomId
-    , viewHostBoxes model
-    ]
-
-
-viewHostHeaderButtons : RoomId -> Element Msg
-viewHostHeaderButtons (RoomId roomId) =
-    header
-        [ button { onPress = Just Edit, label = Element.text "Editer" }
-        , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
-        , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
-        , Element.link [] { url = "/room/" ++ roomId, label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
-        , button { onPress = Just Veil, label = Element.text "Cacher" }
-        , button { onPress = Just Unveil, label = Element.text "Dévoiler" }
-        ]
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
@@ -203,98 +143,6 @@ viewPlayerConstraint color model =
                 "En attente"
         }
     ]
-
-
-viewHostBoxes : Model -> Element Msg
-viewHostBoxes model =
-    Element.column
-        [ Element.height Element.fill
-        , Element.width Element.fill
-        ]
-        [ Element.wrappedRow
-            [ Element.height Element.fill
-            , Element.width Element.fill
-            ]
-            [ viewBox Blue model
-            , viewBox Yellow model
-            ]
-        , Element.wrappedRow
-            [ Element.height Element.fill
-            , Element.width Element.fill
-            ]
-            [ viewBox Red model
-            , viewBox Green model
-            ]
-        ]
-
-
-viewBox : Color -> { a | blue : String, yellow : String, red : String, green : String, mode : Mode } -> Element Msg
-viewBox color model =
-    let
-        text : String
-        text =
-            case color of
-                Blue ->
-                    model.blue
-
-                Yellow ->
-                    model.yellow
-
-                Red ->
-                    model.red
-
-                Green ->
-                    model.green
-    in
-    case model.mode of
-        Editing ->
-            Element.el
-                [ Element.height Element.fill
-                , Element.width Element.fill
-                , Element.padding 40
-                , Background.color (Color.backgroundColor color)
-                ]
-                (Element.Input.text
-                    [ Element.height Element.fill
-                    , Element.width Element.fill
-                    , Element.centerX
-                    , Element.centerY
-                    , Background.color (Color.backgroundColor color)
-                    , Font.color white
-                    , Font.bold
-                    , Font.center
-                    ]
-                    { onChange = ChangedInput color
-                    , text = text
-                    , placeholder = Nothing
-                    , label = Element.Input.labelHidden "Constraint"
-                    }
-                )
-
-        ShowingAll ->
-            box color
-                { onPress = Nothing
-                , label = text
-                }
-
-        Showing Nothing ->
-            box color
-                { onPress = Just (Show (Just color))
-                , label = "Révéler"
-                }
-
-        Showing (Just showingColor) ->
-            if color == showingColor then
-                box color
-                    { onPress = Just (Show Nothing)
-                    , label = text
-                    }
-
-            else
-                box color
-                    { onPress = Nothing
-                    , label = "\u{00A0}"
-                    }
 
 
 box : Color -> { onPress : Maybe msg, label : String } -> Element msg

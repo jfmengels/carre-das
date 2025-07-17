@@ -8,6 +8,7 @@ import Element exposing (Element)
 import Html exposing (Html)
 import Lamdera
 import Room
+import RoomAsHost
 import RoomSelect
 import Types exposing (..)
 import Url exposing (Url)
@@ -70,6 +71,26 @@ init url key =
                 ]
             )
 
+        Just (Route_RoomAsHost roomId) ->
+            let
+                normalizedRoomId : String
+                normalizedRoomId =
+                    String.toLower roomId
+
+                room : RoomAsHost.Model
+                room =
+                    RoomAsHost.init (RoomId normalizedRoomId)
+            in
+            ( { key = key
+              , state = InRoomAsHost room
+              }
+            , if roomId /= normalizedRoomId then
+                Nav.replaceUrl key ("/room/" ++ normalizedRoomId)
+
+              else
+                Cmd.none
+            )
+
         Just Route_Admin ->
             let
                 ( admin, cmd ) =
@@ -92,6 +113,7 @@ init url key =
 type Route
     = Route_RoomSelect
     | Route_Room String Role
+    | Route_RoomAsHost String
     | Route_Admin
 
 
@@ -108,7 +130,7 @@ parseUrl url =
             Just (Route_Room roomId UndecidedUserType)
 
         [ "room", roomId, "host" ] ->
-            Just (Route_Room roomId Host)
+            Just (Route_RoomAsHost roomId)
 
         _ ->
             Nothing
@@ -141,6 +163,20 @@ update msg model =
                     in
                     ( { model | state = InRoom room }
                     , Cmd.map RoomMsg cmd
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        RoomAsHostMsg roomMsg ->
+            case model.state of
+                InRoomAsHost roomModel ->
+                    let
+                        ( room, cmd ) =
+                            RoomAsHost.update roomMsg roomModel
+                    in
+                    ( { model | state = InRoomAsHost room }
+                    , Cmd.map RoomAsHostMsg cmd
                     )
 
                 _ ->
@@ -220,11 +256,14 @@ view model =
     { title = ""
     , body =
         case model.state of
+            RoomSelect roomSelect ->
+                column RoomSelectMsg (RoomSelect.view roomSelect)
+
             InRoom room ->
                 column RoomMsg (Room.view room)
 
-            RoomSelect roomSelect ->
-                column RoomSelectMsg (RoomSelect.view roomSelect)
+            InRoomAsHost room ->
+                column RoomAsHostMsg (RoomAsHost.view room)
 
             Admin admin ->
                 column AdminMsg (Admin.view admin)

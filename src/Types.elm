@@ -18,6 +18,7 @@ type alias FrontendModel =
 type State
     = RoomSelect RoomSelectModel
     | InRoom RoomModel
+    | InRoomAsHost RoomAsHostModel
     | Admin AdminModel
     | RouteError
 
@@ -30,9 +31,19 @@ type alias RoomSelectModel =
 
 type alias RoomModel =
     { roomId : RoomId
-    , mode : Mode
     , constraintsDisplayed : Bool
     , role : Role
+    , blue : String
+    , yellow : String
+    , red : String
+    , green : String
+    }
+
+
+type alias RoomAsHostModel =
+    { roomId : RoomId
+    , mode : Mode
+    , constraintsDisplayed : Bool
     , blue : String
     , yellow : String
     , red : String
@@ -71,7 +82,6 @@ type Mode
 
 type Role
     = UndecidedUserType
-    | Host
     | Player Color
 
 
@@ -101,6 +111,7 @@ type FrontendMsg
     | UrlChanged Url
     | RoomSelectMsg RoomSelectMsg
     | RoomMsg RoomMsg
+    | RoomAsHostMsg RoomAsHostMsg
     | AdminMsg AdminMsg
     | NoOpFrontendMsg
 
@@ -111,11 +122,14 @@ type RoomSelectMsg
 
 
 type RoomMsg
+    = ChangeRole Role
+
+
+type RoomAsHostMsg
     = ShowAll
     | Edit
     | ChangedInput Color String
     | Show (Maybe Color)
-    | ChangeRole Role
     | Unveil
     | Veil
 
