@@ -67,7 +67,17 @@ updateFromFrontendWithTime now clientId toBackend model =
         RegisterToRoom roomId ->
             case SeqDict.get roomId model.rooms of
                 Nothing ->
-                    ( { model | rooms = SeqDict.insert roomId (emptyRoom clientId emptyConstraints) model.rooms }, Cmd.none )
+                    ( { model
+                        | rooms =
+                            SeqDict.insert roomId
+                                { constraints = emptyConstraints
+                                , connectedPlayers = Set.singleton clientId
+                                , constraintsDisplayed = False
+                                }
+                                model.rooms
+                      }
+                    , Cmd.none
+                    )
 
                 Just room ->
                     ( { model
@@ -148,14 +158,6 @@ updateFromFrontendWithTime now clientId toBackend model =
                 |> SendRoomsToClient
                 |> sendToFrontend clientId
             )
-
-
-emptyRoom : ClientId -> RoomConstraints -> Room
-emptyRoom clientId constraints =
-    { constraints = constraints
-    , connectedPlayers = Set.singleton clientId
-    , constraintsDisplayed = False
-    }
 
 
 emptyConstraints : RoomConstraints
