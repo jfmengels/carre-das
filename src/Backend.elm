@@ -1,5 +1,6 @@
 module Backend exposing (..)
 
+import Constraints
 import Lamdera exposing (ClientId, SessionId, sendToFrontend)
 import SeqDict
 import Set
@@ -70,7 +71,7 @@ updateFromFrontendWithTime now clientId toBackend model =
                     ( { model
                         | rooms =
                             SeqDict.insert roomId
-                                { constraints = emptyConstraints
+                                { constraints = Constraints.empty
                                 , connectedPlayers = Set.singleton clientId
                                 , constraintsDisplayed = False
                                 , lastChangeDate = now
@@ -166,15 +167,6 @@ updateFromFrontendWithTime now clientId toBackend model =
             ( { model | rooms = SeqDict.remove roomId model.rooms }
             , Cmd.none
             )
-
-
-emptyConstraints : RoomConstraints
-emptyConstraints =
-    { blue = ""
-    , yellow = ""
-    , red = ""
-    , green = ""
-    }
 
 
 subscriptions : Model -> Sub BackendMsg
