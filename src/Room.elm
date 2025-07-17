@@ -18,7 +18,7 @@ type alias Msg =
     RoomMsg
 
 
-init : RoomId -> Role -> ( RoomModel, Cmd msg )
+init : RoomId -> Role -> ( Model, Cmd msg )
 init roomId role =
     ( { roomId = roomId
       , mode = Showing Nothing
