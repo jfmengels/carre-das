@@ -13,6 +13,10 @@ type alias Model =
     BackendModel
 
 
+type alias Msg =
+    BackendMsg
+
+
 app =
     Lamdera.backend
         { init = init
@@ -22,7 +26,7 @@ app =
         }
 
 
-init : ( Model, Cmd BackendMsg )
+init : ( Model, Cmd Msg )
 init =
     ( { rooms = SeqDict.empty
       }
@@ -30,7 +34,7 @@ init =
     )
 
 
-update : BackendMsg -> Model -> ( Model, Cmd BackendMsg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         NoOpBackendMsg ->
@@ -52,14 +56,14 @@ update msg model =
             updateFromFrontendWithTime time clientId toBackend model
 
 
-updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
+updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
 updateFromFrontend sessionId clientId toBackend model =
     ( model
     , Task.perform (BackendGotTime clientId toBackend) Time.now
     )
 
 
-updateFromFrontendWithTime : Posix -> ClientId -> ToBackend -> Model -> ( Model, Cmd BackendMsg )
+updateFromFrontendWithTime : Posix -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
 updateFromFrontendWithTime now clientId toBackend model =
     case toBackend of
         NoOpToBackend ->
@@ -169,6 +173,6 @@ updateFromFrontendWithTime now clientId toBackend model =
             )
 
 
-subscriptions : Model -> Sub BackendMsg
+subscriptions : Model -> Sub Msg
 subscriptions _ =
     Lamdera.onDisconnect (\_ clientId -> OnDisconnect clientId)

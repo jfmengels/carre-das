@@ -20,14 +20,18 @@ type alias Model =
     FrontendModel
 
 
+type alias Msg =
+    FrontendMsg
+
+
 app :
-    { init : Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
-    , view : Model -> Browser.Document FrontendMsg
-    , update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
-    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd FrontendMsg )
-    , subscriptions : Model -> Sub FrontendMsg
-    , onUrlRequest : Browser.UrlRequest -> FrontendMsg
-    , onUrlChange : Url.Url -> FrontendMsg
+    { init : Url -> Nav.Key -> ( Model, Cmd Msg )
+    , view : Model -> Browser.Document Msg
+    , update : Msg -> Model -> ( Model, Cmd Msg )
+    , updateFromBackend : ToFrontend -> Model -> ( Model, Cmd Msg )
+    , subscriptions : Model -> Sub Msg
+    , onUrlRequest : Browser.UrlRequest -> Msg
+    , onUrlChange : Url.Url -> Msg
     }
 app =
     Lamdera.frontend
@@ -41,7 +45,7 @@ app =
         }
 
 
-init : Url.Url -> Nav.Key -> ( Model, Cmd FrontendMsg )
+init : Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init url key =
     case Route.parseUrl (AppUrl.fromUrl url) of
         Just ( route, needsUrlReplacing ) ->
@@ -70,7 +74,7 @@ init url key =
             )
 
 
-initFromRoute : Nav.Key -> Route -> ( State, Cmd FrontendMsg )
+initFromRoute : Nav.Key -> Route -> ( State, Cmd Msg )
 initFromRoute key route =
     case route of
         Route_RoomSelect ->
@@ -116,7 +120,7 @@ initFromRoute key route =
             )
 
 
-update : FrontendMsg -> Model -> ( Model, Cmd FrontendMsg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlClicked urlRequest ->
@@ -241,7 +245,7 @@ updateFromBackend msg model =
                     ( model, Cmd.none )
 
 
-view : Model -> Browser.Document FrontendMsg
+view : Model -> Browser.Document Msg
 view model =
     { title = ""
     , body =
