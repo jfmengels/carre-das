@@ -188,7 +188,7 @@ update msg model =
                             Admin.update adminMsg adminModel
                     in
                     ( { model | state = Admin admin }
-                    , cmd
+                    , Cmd.map AdminMsg cmd
                     )
 
                 _ ->
