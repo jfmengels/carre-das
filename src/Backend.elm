@@ -168,21 +168,28 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
                     )
 
         RequestRooms maybePassword ->
-            if SeqDict.member sessionId model.authenticatedAdmins || validatePassword maybePassword then
-                ( { model | authenticatedAdmins = SeqDict.insert sessionId now model.authenticatedAdmins }
-                , model.rooms
-                    |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
-                    |> Ok
-                    |> SendRoomsToClient
-                    |> sendToFrontend clientId
-                )
+            if SeqDict.member sessionId model.authenticatedAdmins then
+                authenticateAndSendRooms sessionId clientId now model
 
             else
-                ( model
-                , Err ()
-                    |> SendRoomsToClient
-                    |> sendToFrontend clientId
-                )
+                case maybePassword of
+                    Just pwd ->
+                        if pwd == Env.adminPassword then
+                            authenticateAndSendRooms sessionId clientId now model
+
+                        else
+                            ( model
+                            , Err InvalidPassword
+                                |> SendRoomsToClient
+                                |> sendToFrontend clientId
+                            )
+
+                    Nothing ->
+                        ( model
+                        , Err NotLoggedIn
+                            |> SendRoomsToClient
+                            |> sendToFrontend clientId
+                        )
 
         DeleteRoom roomId ->
             ( { model | rooms = SeqDict.remove roomId model.rooms }
@@ -190,9 +197,15 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
             )
 
 
-validatePassword : Maybe String -> Bool
-validatePassword maybePassword =
-    maybePassword == Just Env.adminPassword
+authenticateAndSendRooms : SessionId -> ClientId -> Posix -> Model -> ( Model, Cmd Msg )
+authenticateAndSendRooms sessionId clientId now model =
+    ( { model | authenticatedAdmins = SeqDict.insert sessionId now model.authenticatedAdmins }
+    , model.rooms
+        |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
+        |> Ok
+        |> SendRoomsToClient
+        |> sendToFrontend clientId
+    )
 
 
 subscriptions : Model -> Sub Msg

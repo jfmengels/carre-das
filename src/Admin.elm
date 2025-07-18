@@ -12,6 +12,7 @@ import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Extra
+import Element.Font as Font
 import Element.Input
 import Lamdera exposing (sendToBackend)
 import Route
@@ -33,6 +34,7 @@ init =
     ( { rooms = []
       , now = Time.millisToPosix 0
       , requiresAdminPassword = False
+      , passwordWasInvalid = False
       , adminPassword = ""
       }
     , sendToBackend (RequestRooms Nothing)
@@ -52,7 +54,10 @@ update msg model =
             )
 
         UserChangedPassword adminPassword ->
-            ( { model | adminPassword = adminPassword }
+            ( { model
+                | adminPassword = adminPassword
+                , passwordWasInvalid = False
+              }
             , Cmd.none
             )
 
@@ -71,7 +76,7 @@ update msg model =
             )
 
 
-gotRooms : Result () (List RoomForAdmin) -> Model -> ( Model, Cmd AdminMsg )
+gotRooms : Result AdminFailureReason (List RoomForAdmin) -> Model -> ( Model, Cmd AdminMsg )
 gotRooms result model =
     case result of
         Ok rooms ->
@@ -80,27 +85,40 @@ gotRooms result model =
                 |> Task.perform (\now -> GotRooms rooms now)
             )
 
-        Err () ->
+        Err NotLoggedIn ->
             ( { model | requiresAdminPassword = True }, Cmd.none )
+
+        Err InvalidPassword ->
+            ( { model | passwordWasInvalid = True }, Cmd.none )
 
 
 view : Model -> List (Element Msg)
 view model =
     if model.requiresAdminPassword then
-        [ viewAdminPasswordForm model.adminPassword ]
+        [ viewAdminPasswordForm model.passwordWasInvalid model.adminPassword ]
 
     else
         [ viewRoomList model.rooms model.now ]
 
 
-viewAdminPasswordForm : String -> Element Msg
-viewAdminPasswordForm adminPassword =
+viewAdminPasswordForm : Bool -> String -> Element Msg
+viewAdminPasswordForm passwordWasInvalid adminPassword =
     Element.column
         [ Element.centerX
         , Element.centerY
         , Element.spacing 5
         ]
-        [ Element.Input.text
+        [ if passwordWasInvalid then
+            Element.el
+                [ Font.color (Element.rgb 1 0 0)
+                , Element.centerX
+                , Element.centerY
+                ]
+                (Element.text "mot de passe incorrect")
+
+          else
+            Element.none
+        , Element.Input.text
             [ Element.height Element.fill
             , Element.width Element.fill
             , Element.Extra.onEnter UserSubmittedPassword

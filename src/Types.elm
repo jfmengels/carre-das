@@ -57,6 +57,7 @@ type alias AdminModel =
     { rooms : List RoomForAdmin
     , now : Posix
     , requiresAdminPassword : Bool
+    , passwordWasInvalid : Bool
     , adminPassword : String
     }
 
@@ -160,4 +161,9 @@ type ToFrontend
     = NoOpToFrontend
     | SendConstraintsToFrontend RoomConstraints Bool
     | HideConstraintsForClient
-    | SendRoomsToClient (Result () (List RoomForAdmin))
+    | SendRoomsToClient (Result AdminFailureReason (List RoomForAdmin))
+
+
+type AdminFailureReason
+    = NotLoggedIn
+    | InvalidPassword
