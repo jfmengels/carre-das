@@ -56,6 +56,8 @@ type alias AudienceRoomModel =
 type alias AdminModel =
     { rooms : List RoomForAdmin
     , now : Posix
+    , requiresAdminPassword : Bool
+    , adminPassword : String
     }
 
 

@@ -31,6 +31,8 @@ init : ( Model, Cmd Msg )
 init =
     ( { rooms = []
       , now = Time.millisToPosix 0
+      , requiresAdminPassword = False
+      , adminPassword = ""
       }
     , sendToBackend RequestRooms
     )
@@ -40,11 +42,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GotRooms rooms now ->
-            ( { rooms = rooms, now = now }, Cmd.none )
+            ( { model | rooms = rooms, now = now }, Cmd.none )
 
         DeleteRoomClicked roomId ->
-            ( { now = model.now
-              , rooms = List.filter (\{ id } -> id /= roomId) model.rooms
+            ( { model
+                | now = model.now
+                , rooms = List.filter (\{ id } -> id /= roomId) model.rooms
               }
             , DeleteRoom roomId
                 |> sendToBackend
@@ -61,7 +64,7 @@ gotRooms result model =
             )
 
         Err () ->
-            ( model, Cmd.none )
+            ( { model | requiresAdminPassword = True }, Cmd.none )
 
 
 view : Model -> List (Element Msg)
