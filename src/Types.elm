@@ -136,6 +136,8 @@ type RoomAsHostMsg
 
 type AdminMsg
     = GotRooms (List RoomForAdmin) Posix
+    | UserChangedPassword String
+    | UserSubmittedPassword
     | DeleteRoomClicked RoomId
 
 

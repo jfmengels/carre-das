@@ -11,6 +11,7 @@ import DateFormat.Relative
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
+import Element.Extra
 import Element.Input
 import Lamdera exposing (sendToBackend)
 import Route
@@ -42,7 +43,23 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GotRooms rooms now ->
-            ( { model | rooms = rooms, now = now }, Cmd.none )
+            ( { model
+                | rooms = rooms
+                , now = now
+                , requiresAdminPassword = False
+              }
+            , Cmd.none
+            )
+
+        UserChangedPassword adminPassword ->
+            ( { model | adminPassword = adminPassword }
+            , Cmd.none
+            )
+
+        UserSubmittedPassword ->
+            ( model
+            , sendToBackend (RequestRooms (Just model.adminPassword))
+            )
 
         DeleteRoomClicked roomId ->
             ( { model
@@ -68,8 +85,52 @@ gotRooms result model =
 
 
 view : Model -> List (Element Msg)
-view { rooms, now } =
-    [ Element.table []
+view model =
+    if model.requiresAdminPassword then
+        [ viewAdminPasswordForm model.adminPassword ]
+
+    else
+        [ viewRoomList model.rooms model.now ]
+
+
+viewAdminPasswordForm : String -> Element Msg
+viewAdminPasswordForm adminPassword =
+    Element.column
+        [ Element.centerX
+        , Element.centerY
+        , Element.spacing 5
+        ]
+        [ Element.Input.text
+            [ Element.height Element.fill
+            , Element.width Element.fill
+            , Element.Extra.onEnter UserSubmittedPassword
+            , Element.Input.focusedOnLoad
+            ]
+            { onChange = UserChangedPassword
+            , text = adminPassword
+            , placeholder = Nothing
+            , label =
+                Element.Input.labelAbove
+                    [ Element.centerX
+                    , Element.centerY
+                    ]
+                    (Element.text "Mot de passe administrateur")
+            }
+        , Element.el
+            [ Element.centerX
+            , Element.centerY
+            ]
+            (button
+                { onPress = Just UserSubmittedPassword
+                , label = Element.text "Valider"
+                }
+            )
+        ]
+
+
+viewRoomList : List RoomForAdmin -> Time.Posix -> Element AdminMsg
+viewRoomList rooms now =
+    Element.table []
         { data = rooms
         , columns =
             [ { header = Element.text "ID"
@@ -98,7 +159,6 @@ view { rooms, now } =
               }
             ]
         }
-    ]
 
 
 unwrapRoomId : RoomId -> String
