@@ -11,10 +11,9 @@ import Color
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
+import Element.Extra
 import Element.Font as Font
 import Element.Input
-import Html.Events
-import Json.Decode as Decode
 import Types exposing (..)
 
 
@@ -76,7 +75,7 @@ view { input, inputSubmitted } =
         , Element.Input.text
             [ Element.height Element.fill
             , Element.width Element.fill
-            , onEnter Submit
+            , Element.Extra.onEnter Submit
             , Element.Input.focusedOnLoad
             ]
             { onChange = ChangedRoomSelectInput
@@ -124,23 +123,6 @@ viewBox color =
         , Background.color (Color.backgroundColor color)
         ]
         Element.none
-
-
-onEnter : msg -> Element.Attribute msg
-onEnter msg =
-    Element.htmlAttribute
-        (Html.Events.on "keyup"
-            (Decode.field "key" Decode.string
-                |> Decode.andThen
-                    (\key ->
-                        if key == "Enter" then
-                            Decode.succeed msg
-
-                        else
-                            Decode.fail "Not the enter key"
-                    )
-            )
-        )
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
