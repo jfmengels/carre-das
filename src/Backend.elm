@@ -167,13 +167,21 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
                     )
 
         RequestRooms ->
-            ( model
-            , model.rooms
-                |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
-                |> Ok
-                |> SendRoomsToClient
-                |> sendToFrontend clientId
-            )
+            if SeqDict.member sessionId model.authenticatedAdmins then
+                ( model
+                , model.rooms
+                    |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
+                    |> Ok
+                    |> SendRoomsToClient
+                    |> sendToFrontend clientId
+                )
+
+            else
+                ( model
+                , Err ()
+                    |> SendRoomsToClient
+                    |> sendToFrontend clientId
+                )
 
         DeleteRoom roomId ->
             ( { model | rooms = SeqDict.remove roomId model.rooms }
