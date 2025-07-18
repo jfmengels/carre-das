@@ -32,19 +32,13 @@ init =
     ( { rooms = []
       , now = Time.millisToPosix 0
       }
-    , Cmd.batch
-        [ Task.perform GotTime Time.now
-        , sendToBackend RequestRooms
-        ]
+    , sendToBackend RequestRooms
     )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GotTime now ->
-            ( { rooms = model.rooms, now = now }, Cmd.none )
-
         GotRooms rooms now ->
             ( { rooms = rooms, now = now }, Cmd.none )
 
