@@ -34,7 +34,7 @@ init =
       , requiresAdminPassword = False
       , adminPassword = ""
       }
-    , sendToBackend RequestRooms
+    , sendToBackend (RequestRooms Nothing)
     )
 
 

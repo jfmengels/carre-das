@@ -144,7 +144,7 @@ type ToBackend
     | RegisterToRoom RoomId
     | UnveilConstraints RoomId RoomConstraints
     | HideConstraints RoomId
-    | RequestRooms
+    | RequestRooms (Maybe String)
     | DeleteRoom RoomId
 
 

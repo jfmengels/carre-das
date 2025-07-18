@@ -166,9 +166,9 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
                         |> Cmd.batch
                     )
 
-        RequestRooms ->
-            if SeqDict.member sessionId model.authenticatedAdmins then
-                ( model
+        RequestRooms maybePassword ->
+            if SeqDict.member sessionId model.authenticatedAdmins || validatePassword maybePassword then
+                ( { model | authenticatedAdmins = SeqDict.insert sessionId now model.authenticatedAdmins }
                 , model.rooms
                     |> SeqDict.foldl (\roomId room acc -> { id = roomId, lastChangeDate = room.lastChangeDate } :: acc) []
                     |> Ok
@@ -187,6 +187,11 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
             ( { model | rooms = SeqDict.remove roomId model.rooms }
             , Cmd.none
             )
+
+
+validatePassword : Maybe String -> Bool
+validatePassword maybePassword =
+    maybePassword == Just "secret"
 
 
 subscriptions : Model -> Sub Msg
