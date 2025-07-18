@@ -1,4 +1,12 @@
-module Room exposing (..)
+module Room exposing
+    ( Model
+    , Msg
+    , hideConstraints
+    , init
+    , setConstraints
+    , update
+    , view
+    )
 
 import Color
 import Constraints

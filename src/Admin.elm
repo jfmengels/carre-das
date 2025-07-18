@@ -1,4 +1,11 @@
-module Admin exposing (..)
+module Admin exposing
+    ( Model
+    , Msg
+    , gotRooms
+    , init
+    , update
+    , view
+    )
 
 import DateFormat.Relative
 import Element exposing (Element)

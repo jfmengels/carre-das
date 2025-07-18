@@ -1,4 +1,10 @@
-module RoomAsHost exposing (..)
+module RoomAsHost exposing
+    ( Model
+    , Msg
+    , init
+    , update
+    , view
+    )
 
 import Color
 import Constraints

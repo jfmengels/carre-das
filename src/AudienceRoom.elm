@@ -1,4 +1,10 @@
-module AudienceRoom exposing (..)
+module AudienceRoom exposing
+    ( Model
+    , hideConstraints
+    , init
+    , setConstraints
+    , view
+    )
 
 import Color
 import Constraints

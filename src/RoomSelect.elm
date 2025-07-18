@@ -1,4 +1,10 @@
-module RoomSelect exposing (..)
+module RoomSelect exposing
+    ( Model
+    , Msg
+    , init
+    , update
+    , view
+    )
 
 import Browser.Navigation
 import Color

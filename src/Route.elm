@@ -1,4 +1,8 @@
-module Route exposing (..)
+module Route exposing
+    ( Route(..)
+    , parseUrl
+    , toUrl
+    )
 
 import AppUrl exposing (AppUrl)
 
