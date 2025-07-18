@@ -198,7 +198,7 @@ update msg model =
             ( model, Cmd.none )
 
 
-updateFromBackend : ToFrontend -> Model -> ( Model, Cmd msg )
+updateFromBackend : ToFrontend -> Model -> ( Model, Cmd Msg )
 updateFromBackend msg model =
     case msg of
         NoOpToFrontend ->
