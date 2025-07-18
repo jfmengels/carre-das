@@ -1,6 +1,7 @@
 module Backend exposing (..)
 
 import Constraints
+import Env
 import Lamdera exposing (ClientId, SessionId, sendToFrontend)
 import SeqDict
 import Set
@@ -191,7 +192,7 @@ updateFromFrontendWithTime now sessionId clientId toBackend model =
 
 validatePassword : Maybe String -> Bool
 validatePassword maybePassword =
-    maybePassword == Just "secret"
+    maybePassword == Just Env.adminPassword
 
 
 subscriptions : Model -> Sub Msg
