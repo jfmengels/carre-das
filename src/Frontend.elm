@@ -1,7 +1,7 @@
 module Frontend exposing (..)
 
 import Admin
-import AppUrl exposing (AppUrl)
+import AppUrl
 import AudienceRoom
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
@@ -40,7 +40,7 @@ app =
         , onUrlChange = UrlChanged
         , update = update
         , updateFromBackend = updateFromBackend
-        , subscriptions = \m -> Sub.none
+        , subscriptions = \_ -> Sub.none
         , view = view
         }
 
@@ -51,7 +51,7 @@ init url key =
         Just ( route, needsUrlReplacing ) ->
             let
                 ( state, cmd ) =
-                    initFromRoute key route
+                    initFromRoute route
             in
             ( { key = key
               , state = state
@@ -74,8 +74,8 @@ init url key =
             )
 
 
-initFromRoute : Nav.Key -> Route -> ( State, Cmd Msg )
-initFromRoute key route =
+initFromRoute : Route -> ( State, Cmd Msg )
+initFromRoute route =
     case route of
         Route_RoomSelect ->
             ( RoomSelect RoomSelect.init
