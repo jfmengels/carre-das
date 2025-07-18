@@ -35,6 +35,7 @@ app =
 init : ( Model, Cmd Msg )
 init =
     ( { rooms = SeqDict.empty
+      , authenticatedAdmins = SeqDict.empty
       }
     , Cmd.none
     )

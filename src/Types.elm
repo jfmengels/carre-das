@@ -2,7 +2,7 @@ module Types exposing (..)
 
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
-import Lamdera exposing (ClientId)
+import Lamdera exposing (ClientId, SessionId)
 import SeqDict exposing (SeqDict)
 import Set exposing (Set)
 import Time exposing (Posix)
@@ -84,6 +84,7 @@ type Mode
 
 type alias BackendModel =
     { rooms : SeqDict RoomId Room
+    , authenticatedAdmins : SeqDict SessionId Posix
     }
 
 
