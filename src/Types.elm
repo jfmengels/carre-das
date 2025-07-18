@@ -156,4 +156,4 @@ type ToFrontend
     = NoOpToFrontend
     | SendConstraintsToFrontend RoomConstraints Bool
     | HideConstraintsForClient
-    | SendRoomsToClient (List RoomForAdmin)
+    | SendRoomsToClient (Result () (List RoomForAdmin))
