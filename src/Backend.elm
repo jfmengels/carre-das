@@ -17,6 +17,12 @@ type alias Msg =
     BackendMsg
 
 
+app :
+    { init : ( Model, Cmd Msg )
+    , update : Msg -> Model -> ( Model, Cmd Msg )
+    , updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
+    , subscriptions : Model -> Sub Msg
+    }
 app =
     Lamdera.backend
         { init = init
