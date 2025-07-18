@@ -149,7 +149,7 @@ type ToBackend
 type BackendMsg
     = NoOpBackendMsg
     | OnDisconnect ClientId
-    | BackendGotTime ClientId ToBackend Posix
+    | BackendGotTime SessionId ClientId ToBackend Posix
 
 
 type ToFrontend

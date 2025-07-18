@@ -59,19 +59,19 @@ update msg model =
             , Cmd.none
             )
 
-        BackendGotTime clientId toBackend time ->
-            updateFromFrontendWithTime time clientId toBackend model
+        BackendGotTime sessionId clientId toBackend time ->
+            updateFromFrontendWithTime time sessionId clientId toBackend model
 
 
 updateFromFrontend : SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
 updateFromFrontend sessionId clientId toBackend model =
     ( model
-    , Task.perform (BackendGotTime clientId toBackend) Time.now
+    , Task.perform (BackendGotTime sessionId clientId toBackend) Time.now
     )
 
 
-updateFromFrontendWithTime : Posix -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
-updateFromFrontendWithTime now clientId toBackend model =
+updateFromFrontendWithTime : Posix -> SessionId -> ClientId -> ToBackend -> Model -> ( Model, Cmd Msg )
+updateFromFrontendWithTime now sessionId clientId toBackend model =
     case toBackend of
         NoOpToBackend ->
             ( model, Cmd.none )
