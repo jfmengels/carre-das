@@ -235,18 +235,17 @@ updateFromBackend msg model =
                     ( model, Cmd.none )
 
         SendRoomsToClient result ->
-            case result of
-                Ok rooms ->
-                    case model.state of
-                        Admin adminModel ->
-                            ( { model | state = Admin (Admin.gotRooms rooms adminModel) }
-                            , Cmd.none
-                            )
+            case model.state of
+                Admin adminModel ->
+                    let
+                        ( admin, cmd ) =
+                            Admin.gotRooms result adminModel
+                    in
+                    ( { model | state = Admin admin }
+                    , Cmd.map AdminMsg cmd
+                    )
 
-                        _ ->
-                            ( model, Cmd.none )
-
-                Err () ->
+                _ ->
                     ( model, Cmd.none )
 
 

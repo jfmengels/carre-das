@@ -45,6 +45,9 @@ update msg model =
         GotTime now ->
             ( { rooms = model.rooms, now = now }, Cmd.none )
 
+        GotRooms rooms now ->
+            ( { rooms = rooms, now = now }, Cmd.none )
+
         DeleteRoomClicked roomId ->
             ( { now = model.now
               , rooms = List.filter (\{ id } -> id /= roomId) model.rooms
@@ -54,9 +57,17 @@ update msg model =
             )
 
 
-gotRooms : List RoomForAdmin -> Model -> Model
-gotRooms rooms model =
-    { rooms = rooms, now = model.now }
+gotRooms : Result () (List RoomForAdmin) -> Model -> ( Model, Cmd AdminMsg )
+gotRooms result model =
+    case result of
+        Ok rooms ->
+            ( model
+            , Time.now
+                |> Task.perform (\now -> GotRooms rooms now)
+            )
+
+        Err () ->
+            ( model, Cmd.none )
 
 
 view : Model -> List (Element Msg)

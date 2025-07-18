@@ -134,6 +134,7 @@ type RoomAsHostMsg
 
 type AdminMsg
     = GotTime Posix
+    | GotRooms (List RoomForAdmin) Posix
     | DeleteRoomClicked RoomId
 
 
