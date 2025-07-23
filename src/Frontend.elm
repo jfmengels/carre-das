@@ -8,6 +8,7 @@ import Browser.Navigation as Nav
 import Element exposing (Element)
 import Html exposing (Html)
 import Lamdera
+import RandomPage
 import Room
 import RoomAsHost
 import RoomSelect
@@ -110,12 +111,21 @@ initFromRoute route =
             , Cmd.none
             )
 
+        Route_Random ->
+            let
+                ( model, cmd ) =
+                    RandomPage.init
+            in
+            ( RandomPage model
+            , Cmd.map RandomPageMsg cmd
+            )
+
         Route_Admin ->
             let
-                ( admin, cmd ) =
+                ( model, cmd ) =
                     Admin.init
             in
-            ( Admin admin
+            ( Admin model
             , Cmd.map AdminMsg cmd
             )
 
@@ -175,6 +185,16 @@ update msg model =
                     in
                     ( { model | state = RoomSelect roomSelect }
                     , cmd
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        RandomPageMsg subMsg ->
+            case model.state of
+                RandomPage subModel ->
+                    ( { model | state = RandomPage (RandomPage.update subMsg subModel) }
+                    , Cmd.none
                     )
 
                 _ ->
@@ -268,6 +288,9 @@ view model =
 
             Admin admin ->
                 column AdminMsg (Admin.view admin)
+
+            RandomPage subModel ->
+                column RandomPageMsg (RandomPage.view subModel)
 
             RouteError ->
                 []

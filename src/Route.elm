@@ -12,6 +12,7 @@ type Route
     | Route_Room String
     | Route_RoomAsHost String
     | Route_AudienceRoom String
+    | Route_Random
     | Route_Admin
 
 
@@ -23,6 +24,9 @@ parseUrl url =
 
         [ "admin" ] ->
             Just ( Route_Admin, False )
+
+        [ "random" ] ->
+            Just ( Route_Random, False )
 
         [ "room", roomId ] ->
             lowerCaseRoomId Route_Room roomId
@@ -51,6 +55,9 @@ toUrl route =
 
         Route_AudienceRoom roomId ->
             "/room/" ++ roomId ++ "/audience"
+
+        Route_Random ->
+            "/random"
 
         Route_Admin ->
             "/admin"

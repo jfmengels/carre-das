@@ -3,6 +3,7 @@ module Types exposing (..)
 import Browser exposing (UrlRequest)
 import Browser.Navigation exposing (Key)
 import Lamdera exposing (ClientId, SessionId)
+import Random
 import SeqDict exposing (SeqDict)
 import Set exposing (Set)
 import Time exposing (Posix)
@@ -20,6 +21,7 @@ type State
     | InRoom RoomModel
     | InRoomAsHost RoomAsHostModel
     | InAudienceRoom AudienceRoomModel
+    | RandomPage RandomPageModel
     | Admin AdminModel
     | RouteError
 
@@ -50,6 +52,14 @@ type alias AudienceRoomModel =
     { roomId : RoomId
     , constraintsDisplayed : Bool
     , constraints : RoomConstraints
+    }
+
+
+type alias RandomPageModel =
+    { input : String
+    , drawn : List String
+    , seed : Random.Seed
+    , nothingLeftToDraw : Bool
     }
 
 
@@ -113,6 +123,7 @@ type FrontendMsg
     | RoomSelectMsg RoomSelectMsg
     | RoomMsg RoomMsg
     | RoomAsHostMsg RoomAsHostMsg
+    | RandomPageMsg RandomPageMsg
     | AdminMsg AdminMsg
     | NoOpFrontendMsg
 
@@ -133,6 +144,13 @@ type RoomAsHostMsg
     | Show (Maybe Color)
     | Unveil
     | Veil
+
+
+type RandomPageMsg
+    = UserChangedInput String
+    | UserClickedDraw
+    | UserClickedReset
+    | GotTime Posix
 
 
 type AdminMsg
