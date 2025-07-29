@@ -53,6 +53,9 @@ update msg model =
                 |> sendToBackend
             )
 
+        Reset ->
+            ( { model | constraints = Constraints.empty }, Cmd.none )
+
         Edit ->
             ( { model | mode = Editing }, Cmd.none )
 
@@ -98,6 +101,7 @@ viewHostHeaderButtons (RoomId roomId) =
         [ Element.link [] { url = Route.toUrl (Route.Route_Room roomId), label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
         , button { onPress = Nothing, label = Element.el [ Element.alignRight ] (Element.link [] { url = Route.toUrl Route.Route_RoomSelect, label = Element.text "Sortir" }) }
         , button { onPress = Just Edit, label = Element.text "Editer" }
+        , button { onPress = Just Reset, label = Element.text "Vider" }
         , button { onPress = Just ShowAll, label = Element.text "Tout voir" }
         , button { onPress = Just (Show Nothing), label = Element.text "Tout cacher" }
         , button { onPress = Just Veil, label = Element.text "Cacher" }

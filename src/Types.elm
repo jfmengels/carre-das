@@ -144,6 +144,7 @@ type RoomAsHostMsg
     | Show (Maybe Color)
     | Unveil
     | Veil
+    | Reset
 
 
 type RandomPageMsg
