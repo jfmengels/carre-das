@@ -2,6 +2,7 @@ module RoomAsHost exposing
     ( Model
     , Msg
     , init
+    , setConstraints
     , update
     , view
     )
@@ -26,13 +27,16 @@ type alias Msg =
     RoomAsHostMsg
 
 
-init : RoomId -> Model
+init : RoomId -> ( Model, Cmd FrontendMsg )
 init roomId =
-    { roomId = roomId
-    , mode = Showing Nothing
-    , constraintsDisplayed = False
-    , constraints = Constraints.empty
-    }
+    ( { roomId = roomId
+      , mode = Showing Nothing
+      , constraintsDisplayed = False
+      , constraints = Constraints.empty
+      }
+    , RegisterToRoom roomId
+        |> sendToBackend
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -86,6 +90,14 @@ update msg model =
 
         Show maybeColor ->
             ( { model | mode = Showing maybeColor }, Cmd.none )
+
+
+setConstraints : RoomConstraints -> Bool -> Model -> Model
+setConstraints constraints constraintsDisplayed model =
+    { model
+        | constraints = constraints
+        , constraintsDisplayed = constraintsDisplayed
+    }
 
 
 view : Model -> List (Element Msg)

@@ -103,12 +103,11 @@ initFromRoute route =
 
         Route_RoomAsHost roomId ->
             let
-                room : RoomAsHost.Model
-                room =
+                ( room, cmd ) =
                     RoomAsHost.init (RoomId roomId)
             in
             ( InRoomAsHost room
-            , Cmd.none
+            , cmd
             )
 
         Route_Random ->
@@ -228,6 +227,11 @@ updateFromBackend msg model =
             case model.state of
                 InRoom room ->
                     ( { model | state = InRoom (Room.setConstraints constraints constraintsDisplayed room) }
+                    , Cmd.none
+                    )
+
+                InRoomAsHost room ->
+                    ( { model | state = InRoomAsHost (RoomAsHost.setConstraints constraints constraintsDisplayed room) }
                     , Cmd.none
                     )
 
