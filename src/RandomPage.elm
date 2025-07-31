@@ -31,6 +31,7 @@ init =
       , drawn = []
       , seed = Random.initialSeed 0
       , nothingLeftToDraw = False
+      , showInput = True
       }
     , Task.perform GotTime Time.now
     )
@@ -63,68 +64,87 @@ update msg model =
         UserClickedReset ->
             { model | drawn = [], nothingLeftToDraw = False }
 
+        UserClickedShowInput ->
+            { model | showInput = not model.showInput }
+
 
 view : Model -> List (Element Msg)
 view model =
-    [ Element.row
+    [ Element.column
         [ Element.centerX
-        , Element.centerY
         , Element.spacing 5
         ]
-        [ viewInput model.nothingLeftToDraw model.input
-        , viewDrawn model.drawn
-        ]
+        (if model.showInput then
+            [ Element.el
+                [ Element.centerX ]
+                (button
+                    { onPress = Just UserClickedShowInput
+                    , label = Element.text "Confirmer"
+                    }
+                )
+            , viewInput model.input
+            ]
+
+         else
+            viewDrawMode model
+        )
     ]
 
 
-viewInput : Bool -> String -> Element Msg
-viewInput nothingLeftToDraw input =
-    Element.column
-        [ Element.centerX
-        , Element.centerY
-        , Element.spacing 5
+viewInput : String -> Element Msg
+viewInput input =
+    Element.Input.multiline
+        [ Element.height Element.fill
+        , Element.fill |> Element.maximum 600 |> Element.width
+        , Element.Input.focusedOnLoad
         ]
-        [ Element.Input.multiline
-            [ Element.height Element.fill
-            , Element.width Element.fill
-            , Element.Input.focusedOnLoad
-            ]
-            { onChange = UserChangedInput
-            , text = input
-            , placeholder = Nothing
-            , label =
-                Element.Input.labelAbove
-                    [ Element.centerX
-                    , Element.centerY
-                    ]
-                    (Element.text "À tirer")
-            , spellcheck = False
-            }
-        , Element.row
-            [ Element.centerX
-            , Element.centerY
-            , Element.spacing 5
-            ]
-            [ button
-                { onPress = Just UserClickedDraw
-                , label = Element.text "Tirer"
-                }
-            , button
-                { onPress = Just UserClickedReset
-                , label = Element.text "Ré-initialiser"
-                }
-            ]
-        , if nothingLeftToDraw then
-            Element.el
-                [ Font.color (Element.rgb 1 0 0)
-                , Element.centerX
+        { onChange = UserChangedInput
+        , text = input
+        , placeholder = Nothing
+        , label =
+            Element.Input.labelAbove
+                [ Element.centerX
                 , Element.centerY
                 ]
-                (Element.text "Il n'y a plus rien à tirer")
+                (Element.text "À tirer")
+        , spellcheck = False
+        }
 
-          else
-            Element.none
+
+viewDrawMode : Model -> List (Element RandomPageMsg)
+viewDrawMode model =
+    [ Element.el
+        [ Element.centerX ]
+        (button
+            { onPress = Just UserClickedShowInput
+            , label = Element.text "Éditer"
+            }
+        )
+    , Element.row
+        [ Element.centerX
+        , Element.spacing 5
         ]
+        [ button
+            { onPress = Just UserClickedReset
+            , label = Element.text "Reset"
+            }
+        , button
+            { onPress = Just UserClickedDraw
+            , label = Element.text "Tirer"
+            }
+        ]
+    , if model.nothingLeftToDraw then
+        Element.el
+            [ Font.color (Element.rgb 1 0 0)
+            , Element.centerX
+            , Element.centerY
+            ]
+            (Element.text "Il n'y a plus rien à tirer")
+
+      else
+        Element.none
+    , viewDrawn model.drawn
+    ]
 
 
 viewDrawn : List String -> Element Msg

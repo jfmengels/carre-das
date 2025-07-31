@@ -62,6 +62,7 @@ type alias RandomPageModel =
     , drawn : List String
     , seed : Random.Seed
     , nothingLeftToDraw : Bool
+    , showInput : Bool
     }
 
 
@@ -153,6 +154,7 @@ type RandomPageMsg
     = UserChangedInput String
     | UserClickedDraw
     | UserClickedReset
+    | UserClickedShowInput
     | GotTime Posix
 
 
