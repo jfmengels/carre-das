@@ -6,16 +6,12 @@ module RandomPage exposing
     , view
     )
 
-import DateFormat.Relative
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
-import Element.Extra
 import Element.Font as Font
 import Element.Input
-import Lamdera exposing (sendToBackend)
 import Random
-import Route
 import Task
 import Time
 import Types exposing (..)
