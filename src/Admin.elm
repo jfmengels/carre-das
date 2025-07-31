@@ -68,8 +68,7 @@ update msg model =
 
         DeleteRoomClicked roomId ->
             ( { model
-                | now = model.now
-                , rooms = List.filter (\{ id } -> id /= roomId) model.rooms
+                | rooms = List.filter (\{ id } -> id /= roomId) model.rooms
               }
             , DeleteRoom roomId
                 |> sendToBackend
