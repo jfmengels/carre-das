@@ -37,6 +37,7 @@ type alias RoomModel =
     , constraintsDisplayed : Bool
     , color : Maybe Color
     , constraints : RoomConstraints
+    , waitingForConstraints : Bool
     }
 
 
@@ -52,6 +53,7 @@ type alias AudienceRoomModel =
     { roomId : RoomId
     , constraintsDisplayed : Bool
     , constraints : RoomConstraints
+    , waitingForConstraints : Bool
     }
 
 
@@ -173,11 +175,13 @@ type ToBackend
 type BackendMsg
     = NoOpBackendMsg
     | OnDisconnect ClientId
+    | OnConnect ClientId
     | BackendGotTime SessionId ClientId ToBackend Posix
 
 
 type ToFrontend
     = NoOpToFrontend
+    | Reconnected
     | SendConstraintsToFrontend RoomConstraints Bool
     | HideConstraintsForClient
     | SendRoomsToClient (Result AdminFailureReason (List RoomForAdmin))

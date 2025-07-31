@@ -2,6 +2,7 @@ module AudienceRoom exposing
     ( Model
     , hideConstraints
     , init
+    , onReconnect
     , setConstraints
     , view
     )
@@ -25,10 +26,23 @@ init roomId =
     ( { roomId = roomId
       , constraintsDisplayed = False
       , constraints = Constraints.empty
+      , waitingForConstraints = True
       }
     , RegisterToRoom roomId
         |> sendToBackend
     )
+
+
+onReconnect : Model -> ( Model, Cmd msg )
+onReconnect model =
+    if model.waitingForConstraints then
+        ( model, Cmd.none )
+
+    else
+        ( { model | waitingForConstraints = True }
+        , RegisterToRoom model.roomId
+            |> sendToBackend
+        )
 
 
 setConstraints : RoomConstraints -> Bool -> Model -> Model
@@ -36,6 +50,7 @@ setConstraints constraints constraintsDisplayed model =
     { model
         | constraints = constraints
         , constraintsDisplayed = constraintsDisplayed
+        , waitingForConstraints = False
     }
 
 

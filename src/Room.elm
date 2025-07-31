@@ -3,6 +3,7 @@ module Room exposing
     , Msg
     , hideConstraints
     , init
+    , onReconnect
     , setConstraints
     , update
     , view
@@ -34,10 +35,23 @@ init roomId =
       , constraintsDisplayed = False
       , color = Nothing
       , constraints = Constraints.empty
+      , waitingForConstraints = True
       }
     , RegisterToRoom roomId
         |> sendToBackend
     )
+
+
+onReconnect : Model -> ( Model, Cmd msg )
+onReconnect model =
+    if model.waitingForConstraints then
+        ( model, Cmd.none )
+
+    else
+        ( { model | waitingForConstraints = True }
+        , RegisterToRoom model.roomId
+            |> sendToBackend
+        )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -52,6 +66,7 @@ setConstraints constraints constraintsDisplayed model =
     { model
         | constraints = constraints
         , constraintsDisplayed = constraintsDisplayed
+        , waitingForConstraints = False
     }
 
 

@@ -60,6 +60,11 @@ update msg model =
             , Cmd.none
             )
 
+        OnConnect clientId ->
+            ( model
+            , sendToFrontend clientId Reconnected
+            )
+
         BackendGotTime sessionId clientId toBackend time ->
             updateFromFrontendWithTime time sessionId clientId toBackend model
 
@@ -210,4 +215,7 @@ authenticateAndSendRooms sessionId clientId now model =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Lamdera.onDisconnect (\_ clientId -> OnDisconnect clientId)
+    Sub.batch
+        [ Lamdera.onDisconnect (\_ clientId -> OnDisconnect clientId)
+        , Lamdera.onConnect (\_ clientId -> OnConnect clientId)
+        ]

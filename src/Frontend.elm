@@ -243,6 +243,25 @@ updateFromBackend msg model =
                 _ ->
                     ( model, Cmd.none )
 
+        Reconnected ->
+            case model.state of
+                InRoom room ->
+                    let
+                        ( newRoom, cmd ) =
+                            Room.onReconnect room
+                    in
+                    ( { model | state = InRoom newRoom }, cmd )
+
+                InAudienceRoom room ->
+                    let
+                        ( newRoom, cmd ) =
+                            AudienceRoom.onReconnect room
+                    in
+                    ( { model | state = InAudienceRoom newRoom }, cmd )
+
+                _ ->
+                    ( model, Cmd.none )
+
         HideConstraintsForClient ->
             case model.state of
                 InRoom room ->
