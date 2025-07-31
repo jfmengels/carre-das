@@ -71,14 +71,14 @@ view model =
         , Element.centerY
         , Element.spacing 5
         ]
-        [ viewRandomPasswordForm model.nothingLeftToDraw model.input
+        [ viewInput model.nothingLeftToDraw model.input
         , viewDrawn model.drawn
         ]
     ]
 
 
-viewRandomPasswordForm : Bool -> String -> Element Msg
-viewRandomPasswordForm nothingLeftToDraw input =
+viewInput : Bool -> String -> Element Msg
+viewInput nothingLeftToDraw input =
     Element.column
         [ Element.centerX
         , Element.centerY
