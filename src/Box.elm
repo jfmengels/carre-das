@@ -34,14 +34,12 @@ viewBoxContent text =
             , Font.bold
             , Font.center
             ]
-            [ Element.text
-                (if String.isEmpty text then
-                    "En réserve"
+            (if String.isEmpty text then
+                [ Element.text "En réserve" ]
 
-                 else
-                    text
-                )
-            ]
+             else
+                [ Element.text text ]
+            )
         ]
 
 
