@@ -38,9 +38,22 @@ viewBoxContent text =
                 [ Element.text "En réserve" ]
 
              else
-                [ Element.text text ]
+                text
+                    |> String.split " "
+                    |> List.map wordToElement
+                    |> List.intersperse (Element.text " ")
             )
         ]
+
+
+wordToElement : String -> Element msg
+wordToElement word =
+    case Color.fromString word of
+        Just color ->
+            Element.el [ Font.color (Color.backgroundColor color) ] (Element.text word)
+
+        Nothing ->
+            Element.text word
 
 
 white : Element.Color
