@@ -18,7 +18,7 @@ box color { onPress, label } =
         , Background.color (Color.backgroundColor color)
         ]
         { onPress = onPress
-        , label = viewBoxContent label
+        , label = viewBoxContent (String.trim label)
         }
 
 
