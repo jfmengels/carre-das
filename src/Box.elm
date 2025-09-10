@@ -10,21 +10,21 @@ import Types exposing (Color(..))
 
 
 box : Color -> { onPress : Maybe msg, label : String } -> Element msg
-box color { onPress, label } =
+box backgroundColor { onPress, label } =
     Element.Input.button
         [ Element.centerX
         , Element.centerY
         , Element.height Element.fill
         , Element.width Element.fill
-        , Background.color (Color.backgroundColor color)
+        , Background.color (Color.backgroundColor backgroundColor)
         ]
         { onPress = onPress
-        , label = viewBoxContent (String.trim label)
+        , label = viewBoxContent backgroundColor (String.trim label)
         }
 
 
-viewBoxContent : String -> Element msg
-viewBoxContent text =
+viewBoxContent : Color -> String -> Element msg
+viewBoxContent backgroundColor text =
     Element.column
         [ Element.centerX
         , Element.centerY
@@ -39,13 +39,13 @@ viewBoxContent text =
                 [ Element.text "En réserve" ]
 
              else
-                wordToElement text
+                wordToElement backgroundColor text
             )
         ]
 
 
-wordToElement : String -> List (Element msg)
-wordToElement inputStr =
+wordToElement : Color -> String -> List (Element msg)
+wordToElement backgroundColor inputStr =
     case Regex.find colorWordsRegex inputStr of
         [] ->
             [ Element.text inputStr ]
@@ -54,7 +54,7 @@ wordToElement inputStr =
             List.foldl
                 (\match ( lastIndex, res ) ->
                     ( match.index + String.length match.match
-                    , highlight match.match :: Element.text (String.slice lastIndex match.index inputStr) :: res
+                    , highlight backgroundColor match.match :: Element.text (String.slice lastIndex match.index inputStr) :: res
                     )
                 )
                 ( 0, [] )
@@ -69,9 +69,18 @@ colorWordsRegex =
         |> Maybe.withDefault Regex.never
 
 
-highlight : String -> Element msg
-highlight color =
-    Element.el [ Font.color (Color.backgroundColor (Color.fromString color |> Maybe.withDefault Blue)) ] (Element.text color)
+highlight : Color -> String -> Element msg
+highlight backgroundColor colorStr =
+    case Color.fromString colorStr of
+        Nothing ->
+            Element.text colorStr
+
+        Just color ->
+            if color == backgroundColor then
+                Element.text colorStr
+
+            else
+                Element.el [ Font.color (Color.backgroundColor color) ] (Element.text colorStr)
 
 
 colors : List String
