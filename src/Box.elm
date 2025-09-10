@@ -80,7 +80,7 @@ highlight backgroundColor colorStr =
                 Element.text colorStr
 
             else
-                Element.el [ Font.color (Color.backgroundColor color) ] (Element.text colorStr)
+                Element.el [ Font.color (Color.backgroundColor color) ] (Element.text (String.toUpper colorStr))
 
 
 colors : List String
