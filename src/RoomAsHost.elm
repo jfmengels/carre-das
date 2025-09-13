@@ -190,7 +190,7 @@ viewBox color mode constraints =
                 , Element.padding 40
                 , Background.color (Color.backgroundColor color)
                 ]
-                (Element.Input.text
+                (Element.Input.multiline
                     [ Element.height Element.fill
                     , Element.width Element.fill
                     , Element.centerX
@@ -204,6 +204,7 @@ viewBox color mode constraints =
                     , text = text
                     , placeholder = Nothing
                     , label = Element.Input.labelHidden "Constraint"
+                    , spellcheck = False
                     }
                 )
 
