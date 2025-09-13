@@ -34,6 +34,7 @@ viewBoxContent backgroundColor text =
             , Font.size 50
             , Font.bold
             , Font.center
+            , Element.padding 30
             ]
             (if String.isEmpty text then
                 [ Element.text "En réserve" ]
