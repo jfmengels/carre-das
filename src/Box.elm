@@ -29,19 +29,24 @@ viewBoxContent backgroundColor text =
         [ Element.centerX
         , Element.centerY
         ]
-        [ Element.paragraph
-            [ Font.color white
-            , Font.size 50
-            , Font.bold
-            , Font.center
-            , Element.padding 30
-            ]
+        [ paragraph
             (if String.isEmpty text then
                 [ Element.text "En réserve" ]
 
              else
                 wordToElement backgroundColor text
             )
+        ]
+
+
+paragraph : List (Element msg) -> Element msg
+paragraph =
+    Element.paragraph
+        [ Font.color white
+        , Font.size 50
+        , Font.bold
+        , Font.center
+        , Element.padding 30
         ]
 
 
