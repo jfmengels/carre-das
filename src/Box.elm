@@ -28,15 +28,16 @@ viewBoxContent backgroundColor text =
     Element.column
         [ Element.centerX
         , Element.centerY
+        , Element.padding 30
         ]
-        [ paragraph
-            (if String.isEmpty text then
-                [ Element.text "En réserve" ]
+        (if String.isEmpty text then
+            [ paragraph [ Element.text "En réserve" ] ]
 
-             else
-                wordToElement backgroundColor text
-            )
-        ]
+         else
+            text
+                |> String.lines
+                |> List.map (wordToElement backgroundColor >> paragraph)
+        )
 
 
 paragraph : List (Element msg) -> Element msg
@@ -46,7 +47,6 @@ paragraph =
         , Font.size 50
         , Font.bold
         , Font.center
-        , Element.padding 30
         ]
 
 
