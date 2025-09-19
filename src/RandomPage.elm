@@ -152,7 +152,7 @@ viewDrawn drawn =
     drawn
         |> List.reverse
         |> List.map (\x -> Element.paragraph [] [ Element.text x ])
-        |> Element.textColumn []
+        |> Element.textColumn [ Font.center ]
 
 
 button : { onPress : Maybe msg, label : Element msg } -> Element msg
