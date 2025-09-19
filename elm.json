@@ -20,12 +20,19 @@
             "lamdera/core": "1.0.0",
             "lydell/elm-app-url": "1.0.4",
             "mdgriffith/elm-ui": "1.1.8",
+            "pablohirafuji/elm-qrcode": "4.0.2",
             "ryan-haskell/date-format": "1.0.0"
         },
         "indirect": {
+            "avh4/elm-color": "1.0.0",
+            "danfishgold/base64-bytes": "1.1.0",
             "elm/file": "1.0.5",
             "elm/http": "2.0.0",
-            "elm/virtual-dom": "1.0.4"
+            "elm/svg": "1.0.1",
+            "elm/virtual-dom": "1.0.4",
+            "elm-community/list-extra": "8.7.0",
+            "folkertdev/elm-flate": "2.0.5",
+            "justgook/elm-image": "5.0.0"
         }
     },
     "test-dependencies": {
