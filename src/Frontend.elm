@@ -52,7 +52,7 @@ init url key =
         Just ( route, needsUrlReplacing ) ->
             let
                 ( state, cmd ) =
-                    initFromRoute route
+                    initFromRoute url route
             in
             ( { key = key
               , state = state
@@ -75,8 +75,8 @@ init url key =
             )
 
 
-initFromRoute : Route -> ( State, Cmd Msg )
-initFromRoute route =
+initFromRoute : Url.Url -> Route -> ( State, Cmd Msg )
+initFromRoute url route =
     case route of
         Route_RoomSelect ->
             ( RoomSelect RoomSelect.init
@@ -110,7 +110,7 @@ initFromRoute route =
             , cmd
             )
 
-        Route_Share url roomId ->
+        Route_Share _ roomId ->
             ( ShareRoomLink (ShareRoomLink.init url roomId)
             , Cmd.none
             )
