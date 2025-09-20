@@ -14,7 +14,7 @@ type alias Model =
     ShareRoomLinkModel
 
 
-init : Url -> String -> Model
+init : Url -> RoomId -> Model
 init url roomId =
     ShareRoomLinkModel (Url.toString { url | path = Route.toUrl (Route_Room roomId), query = Nothing })
 

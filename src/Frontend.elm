@@ -86,7 +86,7 @@ initFromRoute route =
         Route_Room roomId ->
             let
                 ( room, cmd ) =
-                    Room.init (RoomId roomId)
+                    Room.init roomId
             in
             ( InRoom room
             , cmd
@@ -95,7 +95,7 @@ initFromRoute route =
         Route_AudienceRoom roomId ->
             let
                 ( room, cmd ) =
-                    AudienceRoom.init (RoomId roomId)
+                    AudienceRoom.init roomId
             in
             ( InAudienceRoom room
             , cmd
@@ -104,7 +104,7 @@ initFromRoute route =
         Route_RoomAsHost roomId ->
             let
                 ( room, cmd ) =
-                    RoomAsHost.init (RoomId roomId)
+                    RoomAsHost.init roomId
             in
             ( InRoomAsHost room
             , cmd

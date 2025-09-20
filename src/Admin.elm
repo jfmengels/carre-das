@@ -153,15 +153,11 @@ viewRoomList rooms now =
             [ { header = Element.text "ID"
               , width = Element.fill
               , view =
-                    .id
-                        >> unwrapRoomId
-                        >> (\roomId ->
-                                Element.link []
-                                    { url = Route.toUrl (Route.Route_Room roomId)
-                                    , label =
-                                        Element.text roomId
-                                    }
-                           )
+                    \{ id } ->
+                        Element.link []
+                            { url = Route.toUrl (Route.Route_Room id)
+                            , label = Element.text (unwrapRoomId id)
+                            }
               }
             , { header = Element.text "Last activity"
               , width = Element.fill

@@ -109,7 +109,7 @@ view model =
 
 
 viewHostHeaderButtons : RoomId -> Element Msg
-viewHostHeaderButtons (RoomId roomId) =
+viewHostHeaderButtons roomId =
     header
         [ Element.link [] { url = Route.toUrl (Route.Route_Room roomId), label = button { onPress = Nothing, label = Element.text "Changer de rôle" } }
         , button { onPress = Nothing, label = Element.el [ Element.alignRight ] (Element.link [] { url = Route.toUrl Route.Route_RoomSelect, label = Element.text "Sortir" }) }

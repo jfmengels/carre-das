@@ -103,7 +103,7 @@ header =
 
 
 viewRoleSelection : RoomId -> List (Element Msg)
-viewRoleSelection (RoomId roomId) =
+viewRoleSelection roomId =
     [ header
         [ Element.link [] { url = Route.toUrl (Route.Route_RoomAsHost roomId), label = button { onPress = Nothing, label = Element.text "Je suis hôte 🪄" } }
         , Element.el [ Element.alignRight ] (Element.link [] { url = Route.toUrl Route.Route_RoomSelect, label = Element.text "Sortir" })
