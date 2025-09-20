@@ -27,7 +27,8 @@ view (ShareRoomLinkModel url) =
         ]
         [ Element.paragraph
             [ Font.center
-            , Font.size 30
+            , Font.bold
+            , Font.size 20
             ]
             [ Element.text url ]
         , Element.Lazy.lazy viewQrCode url
