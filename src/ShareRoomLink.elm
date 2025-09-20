@@ -16,13 +16,11 @@ type alias Model =
 
 init : Url -> String -> Model
 init url roomId =
-    { roomId = RoomId roomId
-    , baseUrl = Url.toString { url | path = Route.toUrl (Route_Room roomId), query = Nothing }
-    }
+    ShareRoomLinkModel (Url.toString { url | path = Route.toUrl (Route_Room roomId), query = Nothing })
 
 
 view : Model -> List (Element msg)
-view { roomId, baseUrl } =
+view (ShareRoomLinkModel url) =
     [ Element.column
         [ Element.centerX
         , Element.centerY
@@ -31,8 +29,8 @@ view { roomId, baseUrl } =
             [ Font.center
             , Font.size 30
             ]
-            [ Element.text baseUrl ]
-        , Element.Lazy.lazy viewQrCode baseUrl
+            [ Element.text url ]
+        , Element.Lazy.lazy viewQrCode url
         ]
     ]
 

@@ -58,10 +58,8 @@ type alias AudienceRoomModel =
     }
 
 
-type alias ShareRoomLinkModel =
-    { roomId : RoomId
-    , baseUrl : String
-    }
+type ShareRoomLinkModel
+    = ShareRoomLinkModel String
 
 
 type alias RandomPageModel =
