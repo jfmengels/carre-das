@@ -6,7 +6,7 @@ import Element.Background as Background
 import Element.Font as Font
 import Element.Input
 import Regex exposing (Regex)
-import Types exposing (Color(..))
+import Types exposing (Color)
 
 
 box : Color -> { onPress : Maybe msg, label : String } -> Element msg

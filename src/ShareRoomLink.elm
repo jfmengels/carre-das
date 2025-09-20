@@ -1,4 +1,4 @@
-module ShareRoomLink exposing (init, view)
+module ShareRoomLink exposing (Model, init, view)
 
 import Element exposing (Element)
 import Element.Font as Font
