@@ -5,6 +5,7 @@ module Route exposing
     )
 
 import AppUrl exposing (AppUrl)
+import Url exposing (Url)
 
 
 type Route
@@ -16,9 +17,14 @@ type Route
     | Route_Admin
 
 
-parseUrl : AppUrl -> Maybe ( Route, Bool )
+parseUrl : Url -> Maybe ( Route, Bool )
 parseUrl url =
-    case url.path of
+    let
+        appUrl : AppUrl
+        appUrl =
+            AppUrl.fromUrl url
+    in
+    case appUrl.path of
         [] ->
             Just ( Route_RoomSelect, False )
 

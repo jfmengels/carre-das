@@ -1,7 +1,6 @@
 module Frontend exposing (..)
 
 import Admin
-import AppUrl
 import AudienceRoom
 import Browser exposing (UrlRequest(..))
 import Browser.Navigation as Nav
@@ -48,7 +47,7 @@ app =
 
 init : Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init url key =
-    case Route.parseUrl (AppUrl.fromUrl url) of
+    case Route.parseUrl url of
         Just ( route, needsUrlReplacing ) ->
             let
                 ( state, cmd ) =
