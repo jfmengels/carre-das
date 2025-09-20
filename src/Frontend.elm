@@ -12,6 +12,7 @@ import Room
 import RoomAsHost
 import RoomSelect
 import Route exposing (Route(..))
+import ShareRoomLink
 import Types exposing (..)
 import Url exposing (Url)
 
@@ -107,6 +108,11 @@ initFromRoute route =
             in
             ( InRoomAsHost room
             , cmd
+            )
+
+        Route_Share url roomId ->
+            ( ShareRoomLink (ShareRoomLink.init url roomId)
+            , Cmd.none
             )
 
         Route_Random ->
@@ -307,6 +313,9 @@ view model =
 
             InRoomAsHost room ->
                 column RoomAsHostMsg (RoomAsHost.view room)
+
+            ShareRoomLink room ->
+                column identity (ShareRoomLink.view room)
 
             Admin admin ->
                 column AdminMsg (Admin.view admin)

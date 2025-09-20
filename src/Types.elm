@@ -21,6 +21,7 @@ type State
     | InRoom RoomModel
     | InRoomAsHost RoomAsHostModel
     | InAudienceRoom AudienceRoomModel
+    | ShareRoomLink ShareRoomLinkModel
     | RandomPage RandomPageModel
     | Admin AdminModel
     | RouteError
@@ -54,6 +55,12 @@ type alias AudienceRoomModel =
     , constraintsDisplayed : Bool
     , constraints : RoomConstraints
     , waitingForConstraints : Bool
+    }
+
+
+type alias ShareRoomLinkModel =
+    { roomId : RoomId
+    , baseUrl : String
     }
 
 
