@@ -110,7 +110,7 @@ initFromRoute url route =
             , cmd
             )
 
-        Route_Share _ roomId ->
+        Route_Share roomId ->
             ( ShareRoomLink (ShareRoomLink.init url roomId)
             , Cmd.none
             )

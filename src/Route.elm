@@ -14,7 +14,7 @@ type Route
     | Route_Room RoomId
     | Route_RoomAsHost RoomId
     | Route_AudienceRoom RoomId
-    | Route_Share Url RoomId
+    | Route_Share RoomId
     | Route_Random
     | Route_Admin
 
@@ -43,7 +43,7 @@ parseUrl url =
             lowerCaseRoomId Route_RoomAsHost roomId
 
         [ "room", roomId, "share" ] ->
-            lowerCaseRoomId (Route_Share url) roomId
+            lowerCaseRoomId Route_Share roomId
 
         [ "room", roomId, "audience" ] ->
             lowerCaseRoomId Route_AudienceRoom roomId
@@ -67,7 +67,7 @@ toUrl route =
         Route_AudienceRoom (RoomId roomId) ->
             "/room/" ++ roomId ++ "/audience"
 
-        Route_Share _ (RoomId roomId) ->
+        Route_Share (RoomId roomId) ->
             "/room/" ++ roomId ++ "/share"
 
         Route_Random ->
